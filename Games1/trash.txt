@@ -1,0 +1,19 @@
+
+# xvar = 0
+# yvar = 0
+
+
+# def player(x, y):
+#     window.blit(playerIMG, (x, y))
+
+# player(playerX, playerY)
+# window.blit(player(playerX, playerY))
+
+# window.fill((0, 0, 0))
+
+ # window.blit(background, (0, 0))
+    # playerX += xvar
+    # playerY += yvar
+    # player(playerX, playerY)
+    # pygame.display.update()
+    # pygame.display.flip()
