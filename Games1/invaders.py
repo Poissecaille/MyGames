@@ -69,7 +69,7 @@ while Continue:
         enemy_position_x = x_limit_right
         enemy_change = -1
     if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
-        enemy_position_y += 1
+        enemy_position_y += 3
 
         # keys
     for event in pygame.event.get():
