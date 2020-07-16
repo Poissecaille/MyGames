@@ -1,5 +1,4 @@
 from random import randint
-
 import pygame
 from pygame.locals import *
 
@@ -12,12 +11,13 @@ from pygame.locals import *
 # Initialise window
 pygame.init()
 pygame.mouse.set_visible(False)
-# creation of the window
+# # creation of the window
 window = pygame.display.set_mode((760, 570))
 
 # creation of the background
 background = pygame.image.load("Games1/images/space_image.png")
-# window.blit(background, (0, 0))
+
+window.blit(background, (0, 0))
 
 # legend and images
 pygame.display.set_caption('Space Invaders')
@@ -59,7 +59,6 @@ while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
     window.fill((0, 0, 0))
     window.blit(background, (0, 0))
-
     # borders and enemy movements
     enemy_position_x += enemy_change
     if enemy_position_x < x_limit_left:
