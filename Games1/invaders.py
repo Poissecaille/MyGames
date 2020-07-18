@@ -15,9 +15,19 @@ pygame.mouse.set_visible(False)
 window = pygame.display.set_mode((760, 570))
 
 # creation of the background
-background = pygame.image.load("Games1/images/space_image.png")
+background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png")
+background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
+print(background_animated)
 
+pic_width = 800
+pic_height = 600
 window.blit(background, (0, 0))
+for i in range(159):
+    background_animated[i] = pygame.image.load("Games1/frames/" + str(background_animated[i])).convert_alpha()
+    # print(background_animated[i])
+    # print(background_animated[i].get_rect())
+
+    # window.blit(background_animated[i], (0, 0, pic_width, pic_height))
 
 # legend and images
 pygame.display.set_caption('Space Invaders')
@@ -34,7 +44,6 @@ x_limit_right = 694
 y_limit_low = 543
 y_limit_high = 132
 y_enemy_limit_low = y_limit_low / 3
-window.blit(playerIMG, player_position)
 # continuous movement
 pygame.key.set_repeat(400, 30)
 
@@ -45,7 +54,8 @@ enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
 enemy_change = 1
 
 # rafraichissement de l'écran
-window.blit(background, (0, 0))
+# window.blit(background, (0, 0))
+# window.blit(sprite_group, (0, 0))
 window.blit(playerIMG, player_position)
 window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
 pygame.display.update()
@@ -58,8 +68,7 @@ Continue = True
 while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
     window.fill((0, 0, 0))
-    window.blit(background, (0, 0))
-    # borders and enemy movements
+
     enemy_position_x += enemy_change
     if enemy_position_x < x_limit_left:
         enemy_position_x = x_limit_left
@@ -70,7 +79,7 @@ while Continue:
     if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
         enemy_position_y += 3
 
-        # keys
+    # keys
     for event in pygame.event.get():
         if event.type == QUIT:
             Continue = False
@@ -103,10 +112,12 @@ while Continue:
         player_position.x = x_limit_left
     if player_position.y < y_limit_high:
         player_position.y = y_limit_high
-    # if player_position.y > y_limit_low:
-    #     player_position.y = y_limit_low
 
+    # for i in range(159):
+    #     window.blit(background_animated[i], ((0, 0, i * pic_width, i * pic_height)))
+    window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
+
     # rafraichissement de l'écran
     pygame.display.update()
