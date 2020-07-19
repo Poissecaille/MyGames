@@ -16,18 +16,18 @@ window = pygame.display.set_mode((760, 570))
 
 # creation of the background
 background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png")
-background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
-print(background_animated)
+# background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
+# print(background_animated)
 
 pic_width = 800
 pic_height = 600
 window.blit(background, (0, 0))
-for i in range(159):
-    background_animated[i] = pygame.image.load("Games1/frames/" + str(background_animated[i])).convert_alpha()
-    # print(background_animated[i])
-    # print(background_animated[i].get_rect())
+# for i in range(159):
+#     background_animated[i] = pygame.image.load("Games1/frames/" + str(background_animated[i])).convert_alpha()
+# print(background_animated[i])
+# print(background_animated[i].get_rect())
 
-    # window.blit(background_animated[i], (0, 0, pic_width, pic_height))
+# window.blit(background_animated[i], (0, 0, pic_width, pic_height))
 
 # legend and images
 pygame.display.set_caption('Space Invaders')
@@ -53,6 +53,14 @@ enemy_position_x = randint(x_limit_left, x_limit_right)
 enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
 enemy_change = 1
 
+# ammo
+missileIMG = pygame.image.load('Games1/images/missile-1.png').convert_alpha()
+missileX = 370
+missileY = 450
+missileXchange = 0
+missileYchange = 10
+fire_missile = "ok"
+
 # rafraichissement de l'écran
 # window.blit(background, (0, 0))
 # window.blit(sprite_group, (0, 0))
@@ -64,6 +72,7 @@ pygame.display.update()
 pygame.event.set_blocked(pygame.MOUSEMOTION)
 
 # Event loop
+
 Continue = True
 while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
@@ -90,6 +99,13 @@ while Continue:
         if event.type == pygame.KEYDOWN:
             print('key pressed')
             print(player_position.x, player_position.y)
+            if event.key == pygame.K_SPACE:
+                if fire_missile == "ok":
+                    fire_missile = "launched"
+                    # missileX = player_position.x
+                    print("FIRE!!!!")
+                    window.blit(missileIMG, (missileX, player_position.y - 20))
+                    # window.blit(missileIMG, (player_position.x, player_position.y + missileYchange))
             if event.key == pygame.K_ESCAPE:
                 Continue = False
             if event.key == pygame.K_UP:
@@ -105,6 +121,17 @@ while Continue:
                 print("LEFT")
                 player_position = player_position.move(-3, 0)
 
+    # missile movements
+
+    if missileY <= 0:
+        missileY = 450
+        fire_missile = "ok"
+
+    if fire_missile == "launched":
+        fire_missile = "launched"
+        window.blit(missileIMG, (missileX, missileY - 20))
+        missileY -= missileYchange
+
     # borders and player movements
     if player_position.x < x_limit_left:
         player_position.x = x_limit_right
@@ -113,11 +140,11 @@ while Continue:
     if player_position.y < y_limit_high:
         player_position.y = y_limit_high
 
-    # for i in range(159):
-    #     window.blit(background_animated[i], ((0, 0, i * pic_width, i * pic_height)))
+    # for i in range(159):background
+    #     window.blit(_animated[i], ((0, 0, i * pic_width, i * pic_height)))
     window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-
+    window.blit(missileIMG, (missileX, missileY))
     # rafraichissement de l'écran
     pygame.display.update()
