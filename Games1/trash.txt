@@ -17,3 +17,5 @@
     # player(playerX, playerY)
     # pygame.display.update()
     # pygame.display.flip()
+
+ and fire_missile == "nofire"

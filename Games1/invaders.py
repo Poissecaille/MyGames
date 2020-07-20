@@ -20,6 +20,7 @@ radio = pygame.mixer.Sound("Games1/sounds/the-man-who-sold-the-world-1982.wav")
 missile_sound = pygame.mixer.Sound("Games1/sounds/missile.wav")
 music_ambiance = pygame.mixer.Sound("Games1/sounds/metroid-prime.wav")
 music_ambiance.play(-1)
+
 # creation of the background
 background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png")
 # background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
@@ -39,9 +40,12 @@ window.blit(background, (0, 0))
 pygame.display.set_caption('Space Invaders')
 icon = pygame.image.load('Games1/images/alien.png')
 pygame.display.set_icon(icon)
+playerIMG = pygame.image.load('Games1/images/spaceship_player.png').convert_alpha()
+enemyIMG = pygame.image.load('Games1/images/alien_spaceship.png').convert_alpha()
+missileIMG = pygame.image.load('Games1/images/missile-1.png').convert_alpha()
+missile_fireIMG = pygame.image.load('Games1/images/fire-missile.png').convert_alpha()
 
 # control of the player
-playerIMG = pygame.image.load('Games1/images/spaceship_player.png').convert_alpha()
 player_position = playerIMG.get_rect()
 player_position.x = 370
 player_position.y = 480
@@ -54,25 +58,29 @@ y_enemy_limit_low = y_limit_low / 3
 pygame.key.set_repeat(400, 30)
 
 # enemy control
-enemyIMG = pygame.image.load('Games1/images/alien_spaceship.png').convert_alpha()
 enemy_position_x = randint(x_limit_left, x_limit_right)
 enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
 enemy_change = 0.3
 
 # ammo
-missileIMG = pygame.image.load('Games1/images/missile-1.png').convert_alpha()
 missileX = 370
 missileY = 440
 missileXchange = 0
 missileYchange = 0.5
-fire_missile = "ok"
+missile_fired = "ready for fire"
+
+# ammo effect
+fireX = 370
+fireY = 506
+fireXchange = 0
+fireYchange = 0.5
+fire_missile = "nofire"
 
 # rafraichissement de l'écran
 # window.blit(background, (0, 0))
 # window.blit(sprite_group, (0, 0))
 window.blit(playerIMG, player_position)
 window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-# window.blit(missileIMG, (missileX, missileY))
 pygame.display.update()
 
 # mouse blocking
@@ -84,7 +92,6 @@ Continue = True
 while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
     window.fill((0, 0, 0))
-
     enemy_position_x += enemy_change
     if enemy_position_x < x_limit_left:
         enemy_position_x = x_limit_left
@@ -107,13 +114,15 @@ while Continue:
             print('key pressed')
             print(player_position.x, player_position.y)
             if event.key == pygame.K_SPACE:
-                if fire_missile == "ok":
-                    fire_missile = "launched"
+                if missile_fired == "ready for fire" and fire_missile == "nofire":
+                    missile_fired = "launched"
+                    fire_missile = "fire"
                     missile_sound.play()
                     missileX = player_position.x
+                    fireX = player_position.x
                     window.blit(missileIMG, (player_position.x, player_position.y - 40))
+                    window.blit(missile_fireIMG, (player_position.x, missileY - 20))
                     print("FIRE!!!!")
-
             if event.key == pygame.K_ESCAPE:
                 Continue = False
             if event.key == pygame.K_TAB and Music == True:
@@ -138,14 +147,22 @@ while Continue:
                 player_position = player_position.move(-3, 0)
 
     # missile movements
-
     if missileY <= 0:
         missileY = player_position.y - 40
-        fire_missile = "ok"
+        missile_fired = "ready for fire"
 
-    if fire_missile == "launched":
-        fire_missile = "launched"
+    if missile_fired == "launched":
+        missile_fired = "launched"
         missileY -= missileYchange
+
+    # fire of the missile movements
+    if fireY <= 20:
+        fireY = missileY + 66
+        fire_missile = "nofire"
+
+    if fire_missile == "fire":
+        fire_missile = "fire"
+        fireY -= fireYchange
 
     # missile physics
     distance_from_enemy = math.sqrt(
@@ -158,7 +175,7 @@ while Continue:
 
     if state_of_target == "hit":
         missileY = missileY - 40
-        fire_missile = "ok"
+        missile_fired = "ready for fire"
 
     # borders and player movements
     if player_position.x < x_limit_left:
@@ -175,8 +192,10 @@ while Continue:
     window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-    if fire_missile == "launched":
+    if missile_fired == "launched":
         window.blit(missileIMG, (missileX, missileY - 40))
+    # if fire_missile == "fire":
+        window.blit(missile_fireIMG, (fireX, fireY - 40))
 
     # rafraichissement de l'écran
     pygame.display.update()
