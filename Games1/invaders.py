@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from pygame.locals import *
+import math
 
 # 1) Initialisation de pygame
 # 2) Appel des modules nécessaires
@@ -14,6 +15,11 @@ pygame.mouse.set_visible(False)
 # # creation of the window
 window = pygame.display.set_mode((760, 570))
 
+# sounds
+radio = pygame.mixer.Sound("Games1/sounds/the-man-who-sold-the-world-1982.wav")
+missile_sound = pygame.mixer.Sound("Games1/sounds/missile.wav")
+music_ambiance = pygame.mixer.Sound("Games1/sounds/metroid-prime.wav")
+music_ambiance.play(-1)
 # creation of the background
 background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png")
 # background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
@@ -73,7 +79,7 @@ pygame.display.update()
 pygame.event.set_blocked(pygame.MOUSEMOTION)
 
 # Event loop
-
+Music = True
 Continue = True
 while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
@@ -103,12 +109,21 @@ while Continue:
             if event.key == pygame.K_SPACE:
                 if fire_missile == "ok":
                     fire_missile = "launched"
+                    missile_sound.play()
                     missileX = player_position.x
                     window.blit(missileIMG, (player_position.x, player_position.y - 40))
                     print("FIRE!!!!")
 
             if event.key == pygame.K_ESCAPE:
                 Continue = False
+            if event.key == pygame.K_TAB and Music == True:
+                Music = False
+                music_ambiance.stop()
+                radio.play()
+            if event.key == pygame.K_LSHIFT and Music == False:
+                Music = True
+                radio.stop()
+                music_ambiance.play(-1)
             if event.key == pygame.K_UP:
                 player_position = player_position.move(0, -3)
                 print("UP")
@@ -125,12 +140,25 @@ while Continue:
     # missile movements
 
     if missileY <= 0:
-        missileY = player_position.y-40
+        missileY = player_position.y - 40
         fire_missile = "ok"
 
     if fire_missile == "launched":
         fire_missile = "launched"
         missileY -= missileYchange
+
+    # missile physics
+    distance_from_enemy = math.sqrt(
+        math.pow(enemy_position_x - missileX, 2) + (math.pow(enemy_position_y - missileY, 2)))
+    if distance_from_enemy < 27:
+        state_of_target = "Hit"
+        print("HIT!!!!")
+    else:
+        state_of_target = "Missed"
+
+    if state_of_target == "hit":
+        missileY = missileY - 40
+        fire_missile = "ok"
 
     # borders and player movements
     if player_position.x < x_limit_left:
