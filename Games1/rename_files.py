@@ -1,6 +1,6 @@
 import os
 
-path = 'D:\Devop/Projects_for_fun/Games1/frames'
+path = '//Games1/frames'
 i = 0
 for filename in os.listdir(path):
     try:

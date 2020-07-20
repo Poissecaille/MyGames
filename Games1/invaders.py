@@ -41,7 +41,7 @@ player_position.x = 370
 player_position.y = 480
 x_limit_left = 3
 x_limit_right = 694
-y_limit_low = 543
+y_limit_low = 504
 y_limit_high = 132
 y_enemy_limit_low = y_limit_low / 3
 # continuous movement
@@ -58,7 +58,7 @@ missileIMG = pygame.image.load('Games1/images/missile-1.png').convert_alpha()
 missileX = 370
 missileY = 440
 missileXchange = 0
-missileYchange = 1
+missileYchange = 0.5
 fire_missile = "ok"
 
 # rafraichissement de l'écran
@@ -103,6 +103,7 @@ while Continue:
             if event.key == pygame.K_SPACE:
                 if fire_missile == "ok":
                     fire_missile = "launched"
+                    missileX = player_position.x
                     window.blit(missileIMG, (player_position.x, player_position.y - 40))
                     print("FIRE!!!!")
 
@@ -138,6 +139,8 @@ while Continue:
         player_position.x = x_limit_left
     if player_position.y < y_limit_high:
         player_position.y = y_limit_high
+    if player_position.y > y_limit_low:
+        player_position.y = y_limit_low
 
     # for i in range(159):background
     #     window.blit(_animated[i], ((0, 0, i * pic_width, i * pic_height)))
@@ -145,7 +148,7 @@ while Continue:
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
     if fire_missile == "launched":
-        window.blit(missileIMG, (player_position.x, missileY - 40))
+        window.blit(missileIMG, (missileX, missileY - 40))
 
     # rafraichissement de l'écran
     pygame.display.update()
