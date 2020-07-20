@@ -17,6 +17,7 @@ window = pygame.display.set_mode((760, 570))
 
 # sounds
 radio = pygame.mixer.Sound("Games1/sounds/the-man-who-sold-the-world-1982.wav")
+missile_explosion = pygame.mixer.Sound("Games1/sounds/explosion.wav")
 missile_sound = pygame.mixer.Sound("Games1/sounds/missile.wav")
 music_ambiance = pygame.mixer.Sound("Games1/sounds/metroid-prime.wav")
 music_ambiance.play(-1)
@@ -169,6 +170,7 @@ while Continue:
         math.pow(enemy_position_x - missileX, 2) + (math.pow(enemy_position_y - missileY, 2)))
     if distance_from_enemy < 27:
         state_of_target = "Hit"
+        missile_explosion.play(1)
         print("HIT!!!!")
     else:
         state_of_target = "Missed"
@@ -194,7 +196,7 @@ while Continue:
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
     if missile_fired == "launched":
         window.blit(missileIMG, (missileX, missileY - 40))
-    # if fire_missile == "fire":
+        # if fire_missile == "fire":
         window.blit(missile_fireIMG, (fireX, fireY - 40))
 
     # rafraichissement de l'écran
