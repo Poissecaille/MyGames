@@ -64,7 +64,7 @@ pygame.key.set_repeat(400, 30)
 # enemy control
 enemy_position_x = randint(x_limit_left, x_limit_right)
 enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
-enemy_change = 0.3
+enemy_change = 0.5
 
 # ammo
 missileX = 370
@@ -105,16 +105,6 @@ Continue = True
 while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
     window.fill((0, 0, 0))
-    enemy_position_x += enemy_change
-    if enemy_position_x < x_limit_left:
-        enemy_position_x = x_limit_left
-        enemy_change = 0.3
-    if enemy_position_x > x_limit_right:
-        enemy_position_x = x_limit_right
-        enemy_change = -0.3
-    if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
-        enemy_position_y += 3
-
     # keys
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -168,6 +158,17 @@ while Continue:
                 print("LEFT")
                 player_position = player_position.move(-5, 0)
 
+    # enemy movements
+    enemy_position_x += enemy_change
+    if enemy_position_x <= x_limit_left:
+        enemy_position_x = x_limit_left
+        enemy_change += 0.5
+    if enemy_position_x >= x_limit_right:
+        enemy_position_x = x_limit_right
+        enemy_change = -0.5
+    if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
+        enemy_position_y += 10
+
     # missile movements
     if missileY <= 0:
         missileY = player_position.y - 40
@@ -206,7 +207,9 @@ while Continue:
         math.pow(enemy_position_x - missileX, 2) + (math.pow(enemy_position_y - missileY, 2)))
     if distance_from_enemy < 27:
         state_of_target = "hit"
-        missile_explosion.play(1)
+        missile_explosion.play()
+        enemy_position_x = randint(x_limit_left, x_limit_right)
+        enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
         print("HIT!!!!")
     else:
         state_of_target = "Missed"
@@ -230,9 +233,9 @@ while Continue:
     window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-    if distance_from_enemy < 27:
+    if distance_from_enemy < 30:
         window.blit(explosionIMG, (enemy_position_x, enemy_position_y))
-        pygame.time.delay(300)
+        pygame.time.delay(200)
     if missile_fired == "launched" and state_of_target != "hit":
         # state_of_target="missed"
         window.blit(missileIMG, (missileX, missileY - 40))
