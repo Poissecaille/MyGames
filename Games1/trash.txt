@@ -19,3 +19,4 @@
     # pygame.display.flip()
 
  and fire_missile == "nofire"
+  and flame_ship == "noflame"
