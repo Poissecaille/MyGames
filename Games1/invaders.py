@@ -79,7 +79,7 @@ fireY = missileY + 30
 fireXchange = 0
 fireYchange = 0.5
 fire_missile = "nofire"
-
+state_of_target = "missed"
 # ship flame effect
 flameX = 375
 flameY = 520
@@ -205,14 +205,11 @@ while Continue:
     # missile physics
     distance_from_enemy = math.sqrt(
         math.pow(enemy_position_x - missileX, 2) + (math.pow(enemy_position_y - missileY, 2)))
-    if distance_from_enemy < 27:
-        state_of_target = "hit"
-        missile_explosion.play()
-        enemy_position_x = randint(x_limit_left, x_limit_right)
-        enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
-        print("HIT!!!!")
-    else:
-        state_of_target = "Missed"
+    # if distance_from_enemy < 27 and state_of_target == "missed":
+    #     state_of_target = "hit"
+    #     print("HIT!!!!")
+    # else:
+    #     state_of_target = "Missed"
 
     if state_of_target == "hit":
         missileY = missileY - 40
@@ -233,11 +230,21 @@ while Continue:
     window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-    if distance_from_enemy < 30:
+
+    if distance_from_enemy < 30 and state_of_target == "missed" and missile_fired == "launched":
+        state_of_target = "hit"
+        # missile_fired = "ready for fire"
         window.blit(explosionIMG, (enemy_position_x, enemy_position_y))
-        pygame.time.delay(200)
+        # window.blit(explosionIMG, (missileX, missileY))
+        missile_explosion.play()
+        pygame.display.flip()
+        pygame.time.delay(1000)
+        enemy_position_x = randint(x_limit_left, x_limit_right)
+        enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
+    else:
+        state_of_target = "Missed"
     if missile_fired == "launched" and state_of_target != "hit":
-        # state_of_target="missed"
+        state_of_target = "missed"
         window.blit(missileIMG, (missileX, missileY - 40))
         window.blit(missile_fireIMG, (fireX, fireY - 40))
     if flame_ship == "flame":
