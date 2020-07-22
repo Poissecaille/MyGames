@@ -9,11 +9,19 @@ import math
 # 4) Boucle infinie
 # 5) Fermeture du programme
 
-# Initialise window
+# Initialise window text render and sounds production
 pygame.init()
 pygame.mouse.set_visible(False)
-# # creation of the window
+# creation of the window
 window = pygame.display.set_mode((760, 570))
+pygame.font.init()
+pygame.mixer.init()
+
+# score
+score = 0
+police = pygame.font.Font("Games1/polices/MountainBridge.otf", 25)
+textX = 600
+textY = 20
 
 # sounds
 radio = pygame.mixer.Sound("Games1/sounds/the-man-who-sold-the-world-1982.wav")
@@ -105,6 +113,8 @@ Continue = True
 while Continue:
     # blit 2 params: 1) image to print 2)tuple abscissa and ordered
     window.fill((0, 0, 0))
+    # rending/score actualisation
+    texte = police.render("Votre Score:" + str(score), True, pygame.Color('#FFFFFF'))
     # keys
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -230,8 +240,9 @@ while Continue:
     window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
     window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
+    window.blit(texte, (textX, textY))
 
-    if distance_from_enemy < 30 and state_of_target == "missed" and missile_fired == "launched":
+    if distance_from_enemy < 30 and state_of_target == "missed":
         state_of_target = "hit"
         # missile_fired = "ready for fire"
         window.blit(explosionIMG, (enemy_position_x, enemy_position_y))
@@ -241,6 +252,9 @@ while Continue:
         pygame.time.delay(1000)
         enemy_position_x = randint(x_limit_left, x_limit_right)
         enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
+        score += 1
+
+        # pygame.display.update(score)
     else:
         state_of_target = "Missed"
     if missile_fired == "launched" and state_of_target != "hit":
@@ -250,5 +264,6 @@ while Continue:
     if flame_ship == "flame":
         window.blit(flameshipIMG, (flameX - 5, flameY + 40))
         window.blit(flameshipIMG, (flame2X + 5, flame2Y + 40))
+
     # rafraichissement de l'écran
     pygame.display.update()
