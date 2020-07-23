@@ -65,7 +65,7 @@ x_limit_left = 3
 x_limit_right = 694
 y_limit_low = 504
 y_limit_high = 132
-y_enemy_limit_low = y_limit_low / 3
+y_enemy_limit_low = 450
 # continuous movement
 pygame.key.set_repeat(400, 30)
 
@@ -73,6 +73,22 @@ pygame.key.set_repeat(400, 30)
 enemy_position_x = randint(x_limit_left, x_limit_right)
 enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
 enemy_change = 0.5
+
+# many enemies control
+ManyenemyIMG = []
+ManyenemyX = []
+ManyenemyY = []
+ManyenemyX_change = []
+ManyenemyY_change = []
+number_of_enemies = 10
+for e in range(number_of_enemies):
+    ManyenemyIMG.append(enemyIMG)
+    ManyenemyX.append(randint(x_limit_left, x_limit_right))
+    ManyenemyY.append(randint(y_limit_high, y_enemy_limit_low))
+    ManyenemyX_change.append(enemy_change)
+    ManyenemyY_change.append(5)
+    print(ManyenemyY)
+    print(ManyenemyX)
 
 # ammo
 missileX = 370
@@ -96,13 +112,6 @@ flame2Y = 520
 flameXchange = 0
 flameYchange = 0.5
 flame_ship = "noflame"
-
-# rafraichissement de l'écran
-# window.blit(background, (0, 0))
-# window.blit(sprite_group, (0, 0))
-window.blit(playerIMG, player_position)
-window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-pygame.display.update()
 
 # mouse blocking
 pygame.event.set_blocked(pygame.MOUSEMOTION)
@@ -178,6 +187,8 @@ while Continue:
         enemy_change = -0.5
     if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
         enemy_position_y += 10
+    if enemy_position_y >= y_enemy_limit_low:
+        enemy_position_y = y_enemy_limit_low
 
     # missile movements
     if missileY <= 0:
