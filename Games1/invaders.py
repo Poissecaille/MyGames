@@ -66,12 +66,13 @@ x_limit_right = 694
 y_limit_low = 504
 y_limit_high = 132
 y_enemy_limit_low = 450
+y_enemy_limit_high = 50
 # continuous movement
 pygame.key.set_repeat(400, 30)
 
 # enemy control
 enemy_position_x = randint(x_limit_left, x_limit_right)
-enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
+enemy_position_y = randint(y_enemy_limit_high, y_enemy_limit_high + 10)
 enemy_change = 0.5
 
 # many enemies control
@@ -84,7 +85,7 @@ number_of_enemies = 10
 for e in range(number_of_enemies):
     ManyenemyIMG.append(enemyIMG)
     ManyenemyX.append(randint(x_limit_left, x_limit_right))
-    ManyenemyY.append(randint(y_limit_high, y_enemy_limit_low))
+    ManyenemyY.append(randint(y_enemy_limit_high, y_enemy_limit_high + 10))
     ManyenemyX_change.append(enemy_change)
     ManyenemyY_change.append(5)
     print(ManyenemyY)
@@ -226,11 +227,6 @@ while Continue:
     # missile physics
     distance_from_enemy = math.sqrt(
         math.pow(enemy_position_x - missileX, 2) + (math.pow(enemy_position_y - missileY, 2)))
-    # if distance_from_enemy < 27 and state_of_target == "missed":
-    #     state_of_target = "hit"
-    #     print("HIT!!!!")
-    # else:
-    #     state_of_target = "Missed"
 
     if state_of_target == "hit":
         missileY = missileY - 40
@@ -255,17 +251,14 @@ while Continue:
 
     if distance_from_enemy < 30 and state_of_target == "missed":
         state_of_target = "hit"
-        # missile_fired = "ready for fire"
+        print("HIT!!!!")
         window.blit(explosionIMG, (enemy_position_x, enemy_position_y))
-        # window.blit(explosionIMG, (missileX, missileY))
         missile_explosion.play()
         pygame.display.flip()
         pygame.time.delay(1000)
         enemy_position_x = randint(x_limit_left, x_limit_right)
-        enemy_position_y = randint(y_limit_high, y_enemy_limit_low)
+        enemy_position_y = randint(y_enemy_limit_high, y_enemy_limit_high + 10)
         score += 1
-
-        # pygame.display.update(score)
     else:
         state_of_target = "Missed"
     if missile_fired == "launched" and state_of_target != "hit":
