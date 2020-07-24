@@ -67,12 +67,13 @@ y_limit_low = 504
 y_limit_high = 132
 y_enemy_limit_low = 450
 y_enemy_limit_high = 50
+second_y_enemy_limit_high = 70
 # continuous movement
 pygame.key.set_repeat(400, 30)
 
 # enemy control
 enemy_position_x = randint(x_limit_left, x_limit_right)
-enemy_position_y = randint(y_enemy_limit_high, y_enemy_limit_high + 10)
+enemy_position_y = randint(y_enemy_limit_high, second_y_enemy_limit_high)
 enemy_change = 0.5
 
 # many enemies control
@@ -85,9 +86,9 @@ number_of_enemies = 10
 for e in range(number_of_enemies):
     ManyenemyIMG.append(enemyIMG)
     ManyenemyX.append(randint(x_limit_left, x_limit_right))
-    ManyenemyY.append(randint(y_enemy_limit_high, y_enemy_limit_high + 10))
+    ManyenemyY.append(randint(y_enemy_limit_high, second_y_enemy_limit_high))
     ManyenemyX_change.append(enemy_change)
-    ManyenemyY_change.append(5)
+    ManyenemyY_change.append(30)
     print(ManyenemyY)
     print(ManyenemyX)
 
@@ -121,7 +122,6 @@ pygame.event.set_blocked(pygame.MOUSEMOTION)
 Music = True
 Continue = True
 while Continue:
-    # blit 2 params: 1) image to print 2)tuple abscissa and ordered
     window.fill((0, 0, 0))
     # rending/score actualisation
     texte = police.render("Votre Score:" + str(score), True, pygame.Color('#FFFFFF'))
@@ -137,7 +137,7 @@ while Continue:
             print('key pressed')
             print(player_position.x, player_position.y)
             if event.key == pygame.K_SPACE:
-                if missile_fired == "ready for fire" and fire_missile == "nofire":
+                if missile_fired == "ready for fire":
                     missile_fired = "launched"
                     fire_missile = "fire"
                     missile_sound.play()
@@ -179,25 +179,25 @@ while Continue:
                 player_position = player_position.move(-5, 0)
 
     # enemy movements
-    enemy_position_x += enemy_change
-    if enemy_position_x <= x_limit_left:
-        enemy_position_x = x_limit_left
-        enemy_change += 0.5
-    if enemy_position_x >= x_limit_right:
-        enemy_position_x = x_limit_right
-        enemy_change = -0.5
-    if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
-        enemy_position_y += 10
-    if enemy_position_y >= y_enemy_limit_low:
-        enemy_position_y = y_enemy_limit_low
+    # enemy_position_x += enemy_change
+    # if enemy_position_x <= x_limit_left:
+    #     enemy_position_x = x_limit_left
+    #     enemy_change += 0.5
+    # if enemy_position_x >= x_limit_right:
+    #     enemy_position_x = x_limit_right
+    #     enemy_change = -0.5
+    # if enemy_position_x == x_limit_left or enemy_position_x == x_limit_right:
+    #     enemy_position_y += 10
+    # if enemy_position_y >= y_enemy_limit_low:
+    #     enemy_position_y = y_enemy_limit_low
 
     # missile movements
-    if missileY <= 0:
+    if missileY <= 0 or missile_fired == "ready for fire":
         missileY = player_position.y - 40
         missile_fired = "ready for fire"
 
     if missile_fired == "launched":
-        missile_fired = "launched"
+        # missile_fired = "launched"
         missileY -= missileYchange
 
     # fire of the missile movements
@@ -221,14 +221,6 @@ while Continue:
         flame2Y += flameYchange
         flame_noise.play(1)
 
-    # missile physics
-    distance_from_enemy = math.sqrt(
-        math.pow(enemy_position_x - missileX, 2) + (math.pow(enemy_position_y - missileY, 2)))
-
-    if state_of_target == "hit":
-        missileY = missileY - 40
-        missile_fired = "ready for fire"
-
     # borders and player movements
     if player_position.x < x_limit_left:
         player_position.x = x_limit_right
@@ -243,21 +235,22 @@ while Continue:
     #     window.blit(_animated[i], ((0, 0, i * pic_width, i * pic_height)))
     window.blit(background, (0, 0))
     window.blit(playerIMG, player_position)
-    window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
+    # window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
     window.blit(texte, (textX, textY))
 
-    if distance_from_enemy < 30 and state_of_target == "missed":
-        state_of_target = "hit"
-        print("HIT!!!!")
-        window.blit(explosionIMG, (enemy_position_x, enemy_position_y))
-        missile_explosion.play()
-        pygame.display.flip()
-        pygame.time.delay(1000)
-        enemy_position_x = randint(x_limit_left, x_limit_right)
-        enemy_position_y = randint(y_enemy_limit_high, y_enemy_limit_high + 10)
-        score += 1
-    else:
-        state_of_target = "Missed"
+    # if distance_from_enemy < 30 and state_of_target == "missed":
+    #     state_of_target = "hit"
+    #     print("HIT!!!!")
+    #     window.blit(explosionIMG, (enemy_position_x, enemy_position_y))
+    #     missile_explosion.play()
+    #     pygame.display.flip()
+    #     pygame.time.delay(1000)
+    #     enemy_position_x = randint(x_limit_left, x_limit_right)
+    #     enemy_position_y = randint(y_enemy_limit_high, y_enemy_limit_high + 10)
+    #     score += 1
+    # else:
+    #     state_of_target = "Missed"
+    #
     if missile_fired == "launched" and state_of_target != "hit":
         state_of_target = "missed"
         window.blit(missileIMG, (missileX, missileY - 40))
@@ -266,5 +259,35 @@ while Continue:
         window.blit(flameshipIMG, (flameX - 5, flameY + 40))
         window.blit(flameshipIMG, (flame2X + 5, flame2Y + 40))
 
+    for e in range(number_of_enemies):
+
+        ManyenemyX[e] += ManyenemyX_change[e]
+        # missile physics
+        distance_from_enemy = math.sqrt(
+            math.pow(ManyenemyX[e] - missileX, 2) + (math.pow(ManyenemyY[e] - missileY, 2)))
+        print(ManyenemyY)
+        print(ManyenemyX)
+        if state_of_target == "hit":
+            missileY = missileY - 40
+            missile_fired = "ready for fire"
+        if ManyenemyX[e] <= 0:
+            ManyenemyX_change[e] = 0.5
+            ManyenemyY[e] += ManyenemyY_change[e]
+        if ManyenemyX[e] >= x_limit_right:
+            ManyenemyX_change[e] = -0.5
+            ManyenemyY[e] += ManyenemyY_change[e]
+        window.blit(ManyenemyIMG[e], (ManyenemyX[e], ManyenemyY[e]))
+        if distance_from_enemy < 30 and state_of_target == "missed":
+            state_of_target = "hit"
+            # missile_fired = "ready for fire"
+            window.blit(explosionIMG, (ManyenemyX[e], ManyenemyY[e]))
+            missile_explosion.play()
+            pygame.display.flip()
+            pygame.time.delay(100)
+            ManyenemyX[e] = randint(x_limit_left, x_limit_right)
+            ManyenemyY[e] = randint(y_enemy_limit_high, second_y_enemy_limit_high)
+            score += 1
+        else:
+            state_of_target = "missed"
     # rafraichissement de l'écran
     pygame.display.update()
