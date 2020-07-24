@@ -13,11 +13,13 @@ import math
 pygame.init()
 pygame.mouse.set_visible(False)
 # creation of the window
-window = pygame.display.set_mode((760, 570))
+window = pygame.display.set_mode((800, 600))
+window_centerX = 180
+window_centerY = 250
 pygame.font.init()
 pygame.mixer.init()
 
-# score
+# score and texts
 score = 0
 police = pygame.font.Font("Games1/polices/MountainBridge.otf", 25)
 textX = 600
@@ -42,7 +44,6 @@ window.blit(background, (0, 0))
 # for i in range(159):
 #     background_animated[i] = pygame.image.load("Games1/frames/" + str(background_animated[i])).convert_alpha()
 # print(background_animated[i])
-# print(background_animated[i].get_rect())
 
 # window.blit(background_animated[i], (0, 0, pic_width, pic_height))
 
@@ -121,6 +122,8 @@ pygame.event.set_blocked(pygame.MOUSEMOTION)
 # Event loop
 Music = True
 Continue = True
+Continue_after_endgame = True
+
 while Continue:
     window.fill((0, 0, 0))
     # rending/score actualisation
@@ -193,7 +196,7 @@ while Continue:
 
     # missile movements
     if missileY <= 0 or missile_fired == "ready for fire":
-        missileY = player_position.y - 40
+        missileY = player_position.y - 20
         missile_fired = "ready for fire"
 
     if missile_fired == "launched":
@@ -253,22 +256,46 @@ while Continue:
     #
     if missile_fired == "launched" and state_of_target != "hit":
         state_of_target = "missed"
-        window.blit(missileIMG, (missileX, missileY - 40))
-        window.blit(missile_fireIMG, (fireX, fireY - 40))
+        window.blit(missileIMG, (missileX, missileY - 20))
+        window.blit(missile_fireIMG, (fireX, fireY - 20))
     if flame_ship == "flame":
         window.blit(flameshipIMG, (flameX - 5, flameY + 40))
         window.blit(flameshipIMG, (flame2X + 5, flame2Y + 40))
 
     for e in range(number_of_enemies):
-
         ManyenemyX[e] += ManyenemyX_change[e]
         # missile physics
         distance_from_enemy = math.sqrt(
             math.pow(ManyenemyX[e] - missileX, 2) + (math.pow(ManyenemyY[e] - missileY, 2)))
-        print(ManyenemyY)
-        print(ManyenemyX)
+        distance_enemy_from_ship = math.sqrt(
+            math.pow(ManyenemyX[e] - player_position.x, 2) + (math.pow(ManyenemyY[e] - player_position.y, 2)))
+        # print(ManyenemyY)
+        # print(ManyenemyX)
+        if score >= 50:
+            victory = police.render("VICTORY", True, pygame.Color('#FFFFFF'))
+            text_rect = victory.get_rect(center=(pic_width / 2, pic_height / 2))
+            pygame.display.flip()
+            window.blit(victory, (text_rect))
+            while Continue_after_endgame == True:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            pygame.quit()
+                pygame.display.update()
+        if distance_enemy_from_ship < 50:
+            game_over = police.render("Aliens killed you GAME OVER", True, pygame.Color('#FFFFFF'))
+            text_rect = game_over.get_rect(center=(pic_width / 2, pic_height / 2))
+            pygame.display.flip()
+            window.blit(game_over, (text_rect))
+            while Continue_after_endgame == True:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            pygame.quit()
+                pygame.display.update()
+
         if state_of_target == "hit":
-            missileY = missileY - 40
+            missileY = missileY - 20
             missile_fired = "ready for fire"
         if ManyenemyX[e] <= 0:
             ManyenemyX_change[e] = 0.5
