@@ -1,6 +1,6 @@
 import pyglet
 
-animated_background = pyglet.image.load_animation('Games1/Images/spacegif.gif')
+animated_background = pyglet.image.load_animation('Games1/images/spacegif.gif')
 animation_sprites = pyglet.sprite.Sprite(animated_background)
 w = animation_sprites.width
 h = animation_sprites.height

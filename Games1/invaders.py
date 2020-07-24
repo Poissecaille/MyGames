@@ -9,8 +9,10 @@ import math
 # 4) Boucle infinie
 # 5) Fermeture du programme
 
-# Initialise window text render and sounds production
+# Initialise window framerate, window text render and sounds production
 pygame.init()
+clock = pygame.time.Clock()
+framerateX = 50
 pygame.mouse.set_visible(False)
 # creation of the window
 window = pygame.display.set_mode((800, 600))
@@ -34,7 +36,7 @@ flame_noise = pygame.mixer.Sound("Games1/sounds/flame.wav")
 music_ambiance.play(-1)
 
 # creation of the background
-background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png")
+# background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png").convert_alpha()
 background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
 pic_width = 800
 pic_height = 600
@@ -54,13 +56,14 @@ playerIMG = pygame.image.load('Games1/images/spaceship_player.png').convert_alph
 enemyIMG = pygame.image.load('Games1/images/alien_spaceship.png').convert_alpha()
 missileIMG = pygame.image.load('Games1/images/missile-1.png').convert_alpha()
 missile_fireIMG = pygame.image.load('Games1/images/fire-missile.png').convert_alpha()
-flameshipIMG = pygame.image.load('Games1/images/flame-ship.png')
-explosionIMG = pygame.image.load('Games1/images/explosion.png')
+flameshipIMG = pygame.image.load('Games1/images/flame-ship.png').convert_alpha()
+explosionIMG = pygame.image.load('Games1/images/explosion.png').convert_alpha()
 
 # control of the player
 player_position = playerIMG.get_rect()
 player_position.x = 370
 player_position.y = 480
+player_position_change = 5
 x_limit_left = 3
 x_limit_right = 694
 y_limit_low = 504
@@ -74,36 +77,22 @@ pygame.key.set_repeat(400, 30)
 # enemy control
 enemy_position_x = randint(x_limit_left, x_limit_right)
 enemy_position_y = randint(y_enemy_limit_high, second_y_enemy_limit_high)
-enemy_change = 0.5
-
-# many enemies control
-ManyenemyIMG = []
-ManyenemyX = []
-ManyenemyY = []
-ManyenemyX_change = []
-ManyenemyY_change = []
+enemy_change = 1.5
+enemyY_change = 30
 number_of_enemies = 10
-for e in range(number_of_enemies):
-    ManyenemyIMG.append(enemyIMG)
-    ManyenemyX.append(randint(x_limit_left, x_limit_right))
-    ManyenemyY.append(randint(y_enemy_limit_high, second_y_enemy_limit_high))
-    ManyenemyX_change.append(enemy_change)
-    ManyenemyY_change.append(30)
-    # print(ManyenemyY)
-    # print(ManyenemyX)
 
 # ammo
 missileX = 370
 missileY = 440
 missileXchange = 0
-missileYchange = 0.5
+missileYchange = 2.0
 missile_fired = "ready for fire"
 
 # ammo effect
 fireX = missileX
 fireY = missileY + 30
 fireXchange = 0
-fireYchange = 0.5
+fireYchange = 2.0
 fire_missile = "nofire"
 state_of_target = "missed"
 # ship flame effect
@@ -118,6 +107,48 @@ flame_ship = "noflame"
 # mouse blocking
 pygame.event.set_blocked(pygame.MOUSEMOTION)
 
+# difficulty definition
+
+# difficulty_choice = input("select a level difficulty: /1=>very easy,2=>easy,3=>medium,4=>hard,5=>very hard")
+# if difficulty_choice == 1:
+#     enemy_change = 1
+#     number_of_enemies = 6
+# if difficulty_choice == 2:
+#     number_of_enemies = 10
+#     enemy_change = 1
+# if difficulty_choice == 3:
+#     pass
+# if difficulty_choice == 4:
+#     number_of_enemies = 15
+#     enemy_change = 2
+#     enemyY_change = 40
+# if difficulty_choice == 5:
+#     number_of_enemies = 15
+#     enemy_change = 2
+#     missileYchange = 1.5
+#     enemyY_change = 40
+# if difficulty_choice == 6:
+#     number_of_enemies = 15
+#     enemy_change = 2.5
+#     missileYchange = 1.5
+#     enemyY_change = 50
+
+# many enemies control
+ManyenemyIMG = []
+ManyenemyX = []
+ManyenemyY = []
+ManyenemyX_change = []
+ManyenemyY_change = []
+
+for e in range(number_of_enemies):
+    ManyenemyIMG.append(enemyIMG)
+    ManyenemyX.append(randint(x_limit_left, x_limit_right))
+    ManyenemyY.append(randint(y_enemy_limit_high, second_y_enemy_limit_high))
+    ManyenemyX_change.append(enemy_change)
+    ManyenemyY_change.append(enemyY_change)
+    # print(ManyenemyY)
+    # print(ManyenemyX)
+
 # Event loop
 Music = True
 Continue = True
@@ -126,14 +157,16 @@ counter = 0
 while Continue:
     window.fill((0, 0, 0))
     for i in range(159):
-        counter += 1
-        print(counter)
-        if counter > 165:
-            counter = 0
-            pygame.display.update()
+        # counter += 1
+        # print(counter)
+        # if counter > 160:
+        #     counter = 0
+        pygame.display.update()
         window.blit(animation_list[i], (0, 0, pic_width, pic_height))
-        # rending/score actualisation
-        texte = police.render("Votre Score:" + str(score), True, pygame.Color('#FFFFFF'))
+        # rending score/FPS actualisation
+        score_text = police.render("Votre Score:" + str(score), True, pygame.Color('#FFFFFF'))
+        framerate = police.render("FPS:" + str(int(clock.get_fps())), True, pygame.Color('#FFFFFF'))
+        clock.tick(80)
         # keys
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -169,23 +202,24 @@ while Continue:
                     music_ambiance.play(-1)
                 if event.key == pygame.K_UP:
                     flame_ship = "flame"
-                    flameX = player_position.x - 20
-                    flame2X = player_position.x + 20
-                    flameY = player_position.y + 20
-                    flame2Y = player_position.y + 20
-                    player_position = player_position.move(0, -5)
+                    flameX = player_position.x - 10
+                    flame2X = player_position.x + 10
+                    flameY = player_position.y + 30
+                    flame2Y = player_position.y + 30
+                    player_position = player_position.move(0, -player_position_change)
                     print("UP")
-                    window.blit(flameshipIMG, (player_position.x - 5, flameY + 20))
-                    window.blit(flameshipIMG, (player_position.x + 5, flame2Y + 20))
+                    window.blit(flameshipIMG, (player_position.x - 10, flameY + 30))
+                    window.blit(flameshipIMG, (player_position.x + 10, flame2Y + 30))
+                    pygame.time.delay(1)
                 if event.key == pygame.K_DOWN:
                     print("DOWN")
-                    player_position = player_position.move(0, 5)
+                    player_position = player_position.move(0, player_position_change)
                 if event.key == pygame.K_RIGHT:
                     print("RIGHT")
-                    player_position = player_position.move(5, 0)
+                    player_position = player_position.move(player_position_change, 0)
                 if event.key == pygame.K_LEFT:
                     print("LEFT")
-                    player_position = player_position.move(-5, 0)
+                    player_position = player_position.move(-player_position_change, 0)
 
         # enemy movements
         # enemy_position_x += enemy_change
@@ -219,7 +253,7 @@ while Continue:
             fireY -= fireYchange
 
         # flame behind the ship movements
-        if flameY > player_position.y + 30 and flame2Y > player_position.y + 30:
+        if flameY > player_position.y + 40 and flame2Y > player_position.y + 40:
             flameY = player_position.y + 20
             flame2Y = player_position.y + 20
             flame_ship = "noflame"
@@ -245,7 +279,8 @@ while Continue:
         # window.blit(background, (0, 0))
         window.blit(playerIMG, player_position)
         # window.blit(enemyIMG, (enemy_position_x, enemy_position_y))
-        window.blit(texte, (textX, textY))
+        window.blit(score_text, (textX, textY))
+        window.blit(framerate, (framerateX, textY))
 
         # if distance_from_enemy < 30 and state_of_target == "missed":
         #     state_of_target = "hit"
@@ -265,9 +300,9 @@ while Continue:
             window.blit(missileIMG, (missileX, missileY - 20))
             window.blit(missile_fireIMG, (fireX, fireY - 20))
         if flame_ship == "flame":
-            window.blit(flameshipIMG, (flameX - 5, flameY + 40))
-            window.blit(flameshipIMG, (flame2X + 5, flame2Y + 40))
-
+            window.blit(flameshipIMG, (flameX - 10, flameY + 40))
+            window.blit(flameshipIMG, (flame2X + 10, flame2Y + 40))
+            # pygame.time.delay(1)
         for e in range(number_of_enemies):
             ManyenemyX[e] += ManyenemyX_change[e]
             # missile physics
@@ -285,6 +320,7 @@ while Continue:
                 while Continue_after_endgame == True:
                     for event in pygame.event.get():
                         if event.type == pygame.KEYDOWN:
+                            print("PRESS ESCAPE TO QUIT")
                             if event.key == pygame.K_ESCAPE:
                                 pygame.quit()
                     pygame.display.update()
@@ -296,6 +332,7 @@ while Continue:
                 while Continue_after_endgame == True:
                     for event in pygame.event.get():
                         if event.type == pygame.KEYDOWN:
+                            print("PRESS ESCAPE TO QUIT")
                             if event.key == pygame.K_ESCAPE:
                                 pygame.quit()
                     pygame.display.update()
@@ -304,15 +341,14 @@ while Continue:
                 missileY = missileY - 20
                 missile_fired = "ready for fire"
             if ManyenemyX[e] <= 0:
-                ManyenemyX_change[e] = 0.5
+                ManyenemyX_change[e] = enemy_change
                 ManyenemyY[e] += ManyenemyY_change[e]
             if ManyenemyX[e] >= x_limit_right:
-                ManyenemyX_change[e] = -0.5
+                ManyenemyX_change[e] = -enemy_change
                 ManyenemyY[e] += ManyenemyY_change[e]
             window.blit(ManyenemyIMG[e], (ManyenemyX[e], ManyenemyY[e]))
             if distance_from_enemy < 30 and state_of_target == "missed":
                 state_of_target = "hit"
-                # missile_fired = "ready for fire"
                 window.blit(explosionIMG, (ManyenemyX[e], ManyenemyY[e]))
                 missile_explosion.play()
                 print("HIT!")
@@ -325,3 +361,4 @@ while Continue:
                 state_of_target = "missed"
         # rafraichissement de l'écran
         # pygame.display.update()
+pygame.quit()
