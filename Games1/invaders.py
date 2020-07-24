@@ -204,9 +204,6 @@ while Continue:
     if fireY <= 30:
         fireY = player_position.y - 20
         fire_missile = "nofire"
-    # if fireY < missileY + 20:
-    #     fireY = missileY + 20
-    #     fire_missile = "fire"
 
     if fire_missile == "fire":
         fire_missile = "fire"
