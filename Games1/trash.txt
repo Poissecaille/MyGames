@@ -20,3 +20,29 @@
 
  and fire_missile == "nofire"
   and flame_ship == "noflame"
+
+# difficulty definition
+
+# difficulty_choice = input("select a level difficulty: /1=>very easy,2=>easy,3=>medium,4=>hard,5=>very hard")
+# if difficulty_choice == 1:
+#     enemy_change = 1
+#     number_of_enemies = 6
+# if difficulty_choice == 2:
+#     number_of_enemies = 10
+#     enemy_change = 1
+# if difficulty_choice == 3:
+#     pass
+# if difficulty_choice == 4:
+#     number_of_enemies = 15
+#     enemy_change = 2
+#     enemyY_change = 40
+# if difficulty_choice == 5:
+#     number_of_enemies = 15
+#     enemy_change = 2
+#     missileYchange = 1.5
+#     enemyY_change = 40
+# if difficulty_choice == 6:
+#     number_of_enemies = 15
+#     enemy_change = 2.5
+#     missileYchange = 1.5
+#     enemyY_change = 50

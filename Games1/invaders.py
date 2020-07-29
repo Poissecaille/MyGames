@@ -2,6 +2,7 @@ from random import randint
 import pygame
 from pygame.locals import *
 import math
+import sys
 
 # 1) Initialisation de pygame
 # 2) Appel des modules nécessaires
@@ -13,7 +14,7 @@ import math
 pygame.init()
 clock = pygame.time.Clock()
 framerateX = 50
-pygame.mouse.set_visible(False)
+
 # creation of the window
 window = pygame.display.set_mode((800, 600))
 window_centerX = 180
@@ -36,17 +37,13 @@ flame_noise = pygame.mixer.Sound("Games1/sounds/flame.wav")
 music_ambiance.play(-1)
 
 # creation of the background
-# background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png").convert_alpha()
+background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png").convert_alpha()
 background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
 pic_width = 800
 pic_height = 600
-# window.blit(background, (0, 0))
 animation_list = []
 for i in range(159):
     animation_list.append(pygame.image.load("Games1/frames/" + str(background_animated[i])).convert_alpha())
-    # print(animation_list)
-#     # print(background_animated[i])
-#     window.blit(background_animated[i], (0, 0, pic_width, pic_height))
 
 # legend and images
 pygame.display.set_caption('Space Invaders')
@@ -73,6 +70,108 @@ y_enemy_limit_high = 50
 second_y_enemy_limit_high = 70
 # continuous movement
 pygame.key.set_repeat(400, 30)
+
+# Event loop
+Music = True
+Continue = True
+Continue_after_endgame = True
+counter = 0
+menu = True
+option_menu = True
+dif = ""
+while menu == True:
+    window.fill((0, 0, 0))
+    text_menu = police.render("WELCOME TO MY SPACE INVADER", True, pygame.Color('#FFFFFF'))
+    text_to_play = police.render("PLAY", True, pygame.Color('#FFFFFF'))
+    text_to_exit = police.render("EXIT", True, pygame.Color('#FFFFFF'))
+    text_to_option = police.render("OPTIONS", True, pygame.Color('#FFFFFF'))
+    # button_to_play = pygame.rect(50, 50, 200, 50)
+    # button_to_exit = pygame.rect(50, 50, 200, 50)
+    # pygame.draw.rect(window,('#FFFFFF'), button_to_play)
+    window.blit(background, (0, 0))
+    window.blit(text_menu, (pic_width / 4, pic_height / 4))
+    window.blit(text_to_play, (pic_width / 2.1, pic_height / 2))
+    window.blit(text_to_exit, (pic_width / 2.1, pic_height / 1.5))
+    window.blit(text_to_option, (pic_width / 2.1, pic_height / 1.2))
+    pygame.display.update()
+    x, y = pygame.mouse.get_pos()
+    # print(x, y)
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
+        if event.type == MOUSEBUTTONDOWN and event.button == 1:
+            if event.pos[1] > 301 and event.pos[1] < 324 and event.pos[0] > 382 and event.pos[0] < 446:
+                menu = False
+            if event.pos[1] > 399 and event.pos[1] < 423 and event.pos[0] > 382 and event.pos[0] < 446:
+                pygame.quit()
+                sys.exit()
+            if event.pos[1] > 500 and event.pos[1] < 522 and event.pos[0] > 382 and event.pos[0] < 446:
+                option_menu = True
+                while option_menu == True:
+                    x, y = pygame.mouse.get_pos()
+                    # print(x, y)
+                    window.fill((0, 0, 0))
+                    window.blit(background, (0, 0))
+                    text_menu = police.render("SPACE INVADER OPTIONS", True, pygame.Color('#FFFFFF'))
+                    difficulty0 = police.render("VERY EASY", True, pygame.Color('#FFFFFF'))
+                    difficulty1 = police.render("EASY", True, pygame.Color('#FFFFFF'))
+                    difficulty2 = police.render("MEDIUM", True, pygame.Color('#FFFFFF'))
+                    difficulty3 = police.render("HARD", True, pygame.Color('#FFFFFF'))
+                    difficulty4 = police.render("VERY HARD", True, pygame.Color('#FFFFFF'))
+                    difficulty5 = police.render("IMPOSSIBLE", True, pygame.Color('#FFFFFF'))
+                    back_choice = police.render("BACK", True, pygame.Color('#FFFFFF'))
+                    window.blit(background, (0, 0))
+                    window.blit(text_menu, (pic_width / 3, 40))
+                    window.blit(difficulty0, (pic_width / 2.1, 100))
+                    window.blit(difficulty1, (pic_width / 2.1, 150))
+                    window.blit(difficulty2, (pic_width / 2.1, 200))
+                    window.blit(difficulty3, (pic_width / 2.1, 250))
+                    window.blit(difficulty4, (pic_width / 2.1, 300))
+                    window.blit(difficulty5, (pic_width / 2.1, 350))
+                    window.blit(back_choice, (pic_width / 2.1, 550))
+                    pygame.display.update()
+                    for event in pygame.event.get():
+                        if event.type == QUIT:
+                            pygame.quit()
+                            sys.exit()
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_ESCAPE:
+                                pygame.quit()
+                                sys.exit()
+                        if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                            if dif != False:
+                                dif = ""
+                            if event.pos[1] > 97 and event.pos[1] < 138 and event.pos[0] > 382 and event.pos[0] < 518:
+                                dif += "very easy"
+                                print(dif)
+                                option_menu = False
+                            if event.pos[1] > 152 and event.pos[1] < 174 and event.pos[0] > 382 and event.pos[0] < 445:
+                                dif += "easy"
+                                print(dif)
+                                option_menu = False
+                            if event.pos[1] > 202 and event.pos[1] < 224 and event.pos[0] > 382 and event.pos[0] < 493:
+                                dif += "medium"
+                                print(dif)
+                                option_menu = False
+                            if event.pos[1] > 252 and event.pos[1] < 275 and event.pos[0] > 382 and event.pos[0] < 445:
+                                dif += "hard"
+                                print(dif)
+                                option_menu = False
+                            if event.pos[1] > 302 and event.pos[1] < 325 and event.pos[0] > 382 and event.pos[0] < 519:
+                                dif += "very hard"
+                                print(dif)
+                                option_menu = False
+                            if event.pos[1] > 352 and event.pos[1] < 374 and event.pos[0] > 382 and event.pos[0] < 534:
+                                dif += "impossible"
+                                print(dif)
+                                option_menu = False
+                            if event.pos[1] > 550 and event.pos[1] < 576 and event.pos[0] > 382 and event.pos[0] < 445:
+                                option_menu = False
 
 # enemy control
 enemy_position_x = randint(x_limit_left, x_limit_right)
@@ -104,34 +203,28 @@ flameXchange = 0
 flameYchange = 0.5
 flame_ship = "noflame"
 
-# mouse blocking
-pygame.event.set_blocked(pygame.MOUSEMOTION)
-
 # difficulty definition
 
-# difficulty_choice = input("select a level difficulty: /1=>very easy,2=>easy,3=>medium,4=>hard,5=>very hard")
-# if difficulty_choice == 1:
-#     enemy_change = 1
-#     number_of_enemies = 6
-# if difficulty_choice == 2:
-#     number_of_enemies = 10
-#     enemy_change = 1
-# if difficulty_choice == 3:
-#     pass
-# if difficulty_choice == 4:
-#     number_of_enemies = 15
-#     enemy_change = 2
-#     enemyY_change = 40
-# if difficulty_choice == 5:
-#     number_of_enemies = 15
-#     enemy_change = 2
-#     missileYchange = 1.5
-#     enemyY_change = 40
-# if difficulty_choice == 6:
-#     number_of_enemies = 15
-#     enemy_change = 2.5
-#     missileYchange = 1.5
-#     enemyY_change = 50
+if dif == "very easy":
+    enemy_change = 1
+    number_of_enemies = 6
+if dif == "easy":
+    number_of_enemies = 10
+    enemy_change = 1
+if dif == "medium":
+    pass
+if dif == "hard":
+    number_of_enemies = 15
+    enemy_change = 2
+    enemyY_change = 40
+if dif == "very hard":
+    number_of_enemies = 15
+    enemy_change = 2
+    enemyY_change = 40
+if dif == "impossible":
+    number_of_enemies = 25
+    enemy_change = 2.5
+    enemyY_change = 80
 
 # many enemies control
 ManyenemyIMG = []
@@ -149,11 +242,9 @@ for e in range(number_of_enemies):
     # print(ManyenemyY)
     # print(ManyenemyX)
 
-# Event loop
-Music = True
-Continue = True
-Continue_after_endgame = True
-counter = 0
+# mouse blocking
+pygame.mouse.set_visible(False)
+pygame.event.set_blocked(pygame.MOUSEMOTION)
 while Continue:
     window.fill((0, 0, 0))
     for i in range(159):
@@ -170,7 +261,9 @@ while Continue:
         # keys
         for event in pygame.event.get():
             if event.type == QUIT:
-                Continue = False
+                # Continue = False
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.KEYUP:
                 print('key released')
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -191,7 +284,8 @@ while Continue:
                         window.blit(missile_fireIMG, (player_position.x, fireY + 20))
                         print("FIRE!!!!")
                 if event.key == pygame.K_ESCAPE:
-                    Continue = False
+                    pygame.quit()
+                    sys.exit()
                 if event.key == pygame.K_TAB and Music == True:
                     Music = False
                     music_ambiance.stop()
@@ -335,6 +429,7 @@ while Continue:
                             print("PRESS ESCAPE TO QUIT")
                             if event.key == pygame.K_ESCAPE:
                                 pygame.quit()
+                    # rafraichissement de l'écran
                     pygame.display.update()
 
             if state_of_target == "hit":
@@ -359,6 +454,4 @@ while Continue:
                 score += 1
             else:
                 state_of_target = "missed"
-        # rafraichissement de l'écran
-        # pygame.display.update()
 pygame.quit()
