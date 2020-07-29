@@ -184,14 +184,14 @@ number_of_enemies = 10
 missileX = 370
 missileY = 440
 missileXchange = 0
-missileYchange = 2.0
+missileYchange = 6
 missile_fired = "ready for fire"
 
 # ammo effect
 fireX = missileX
 fireY = missileY + 30
 fireXchange = 0
-fireYchange = 2.0
+fireYchange = 6
 fire_missile = "nofire"
 state_of_target = "missed"
 # ship flame effect
@@ -304,7 +304,7 @@ while Continue:
                     print("UP")
                     window.blit(flameshipIMG, (player_position.x - 10, flameY + 30))
                     window.blit(flameshipIMG, (player_position.x + 10, flame2Y + 30))
-                    pygame.time.delay(1)
+                    pygame.time.delay(2)
                 if event.key == pygame.K_DOWN:
                     print("DOWN")
                     player_position = player_position.move(0, player_position_change)
