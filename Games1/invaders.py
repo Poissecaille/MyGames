@@ -24,37 +24,37 @@ pygame.mixer.init()
 
 # score and texts
 score = 0
-police = pygame.font.Font("Games1/polices/MountainBridge.otf", 25)
+police = pygame.font.Font("D:/DEVOP/MyGames/Games1/polices/MountainBridge.otf", 25)
 textX = 600
 textY = 20
 
 # sounds
-radio = pygame.mixer.Sound("Games1/sounds/the-man-who-sold-the-world-1982.wav")
-missile_explosion = pygame.mixer.Sound("Games1/sounds/explosion.wav")
-missile_sound = pygame.mixer.Sound("Games1/sounds/missile.wav")
-music_ambiance = pygame.mixer.Sound("Games1/sounds/metroid-prime.wav")
-flame_noise = pygame.mixer.Sound("Games1/sounds/flame.wav")
+radio = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/the-man-who-sold-the-world-1982.wav")
+missile_explosion = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/explosion.wav")
+missile_sound = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/missile.wav")
+music_ambiance = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/metroid-prime.wav")
+flame_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/flame.wav")
 music_ambiance.play(-1)
 
 # creation of the background
-background = pygame.image.load("Games1/frames/frame_0_delay-0.03s.png").convert_alpha()
+background = pygame.image.load("D:/DEVOP/MyGames/Games1/frames/frame_0_delay-0.03s.png").convert_alpha()
 background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
 pic_width = 800
 pic_height = 600
 animation_list = []
 for i in range(159):
-    animation_list.append(pygame.image.load("Games1/frames/" + str(background_animated[i])).convert_alpha())
+    animation_list.append(pygame.image.load("D:/DEVOP/MyGames/Games1/frames/" + str(background_animated[i])).convert_alpha())
 
 # legend and images
 pygame.display.set_caption('Space Invaders')
-icon = pygame.image.load('Games1/images/alien.png')
+icon = pygame.image.load('D:/DEVOP/MyGames/Games1/images/alien.png')
 pygame.display.set_icon(icon)
-playerIMG = pygame.image.load('Games1/images/spaceship_player.png').convert_alpha()
-enemyIMG = pygame.image.load('Games1/images/alien_spaceship.png').convert_alpha()
-missileIMG = pygame.image.load('Games1/images/missile-1.png').convert_alpha()
-missile_fireIMG = pygame.image.load('Games1/images/fire-missile.png').convert_alpha()
-flameshipIMG = pygame.image.load('Games1/images/flame-ship.png').convert_alpha()
-explosionIMG = pygame.image.load('Games1/images/explosion.png').convert_alpha()
+playerIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/spaceship_player.png').convert_alpha()
+enemyIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/alien_spaceship.png').convert_alpha()
+missileIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/missile-1.png').convert_alpha()
+missile_fireIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/fire-missile.png').convert_alpha()
+flameshipIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/flame-ship.png').convert_alpha()
+explosionIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/explosion.png').convert_alpha()
 
 # control of the player
 player_position = playerIMG.get_rect()
