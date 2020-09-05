@@ -60,9 +60,11 @@ goalXhigh = 652
 goalYordi = 60
 goalYplayer = window_height - 60
 
+################ SETTINGS ####################
 collision_upgrade = 15
 push_upgrade = 50
 impact_distance = 40
+################ SETTINGS ####################
 # mouse blocking
 pygame.mouse.set_visible(True)
 
