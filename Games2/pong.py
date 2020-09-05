@@ -22,10 +22,11 @@ score_player2Y = window_height / 4
 music_game = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/a-secret-course-super-mario-sunshine.wav")
 collision_sound = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/pong_noise.wav")
 pong_point = pygame.mixer.Sound('D:/DEVOP/MyGames/Games2/sounds/pong_point.wav')
-music_game.play(-1)
+# music_game.play(-1)
 
 pygame.display.set_caption('Pong')
 icon = pygame.image.load('D:/DEVOP/MyGames/Games2/images/pong.png')
+pygame.display.set_icon(icon)
 
 random_direction = random.choice([-1, 1])
 start_speedX = 4
