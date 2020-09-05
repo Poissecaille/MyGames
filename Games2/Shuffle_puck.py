@@ -62,11 +62,11 @@ goalYplayer = window_height - 60
 
 ################ SETTINGS ####################
 collision_upgrade = 15
-push_upgrade = 50
+push_upgrade = 60
 impact_distance = 40
 ################ SETTINGS ####################
 # mouse blocking
-pygame.mouse.set_visible(True)
+pygame.mouse.set_visible(False)
 
 while True:
     # physics
@@ -204,8 +204,8 @@ while True:
     pygame.draw.aaline(window, white, (0, window_height / 2), (window_width, window_height / 2))
     pygame.draw.circle(window, white, [int(window_width / 2), int(window_height / 2)], 80, 1)
     window.blit(ball, (ballX, ballY))
-    # window.blit(player_cursor, (player_cursorX - 40, player_cursorY))
-    window.blit(rect_player_cursor, (rect_player_cursor.x - 40, rect_player_cursorY))
+    window.blit(player_cursor, (player_cursorX - 40, player_cursorY))
+    # window.blit(rect_player_cursor, (rect_player_cursor.x - 40, rect_player_cursorY))
     window.blit(ordi_cursor, (ordi_cursorX, ordi_cursorY))
     clock.tick(60)
     pygame.display.update()
