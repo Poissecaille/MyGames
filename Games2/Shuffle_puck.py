@@ -27,14 +27,13 @@ goal = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_puck_goal.wav"
 
 pygame.display.set_caption('Shuffle Puck')
 icon = pygame.image.load('D:/DEVOP/MyGames/Games2/images/ball.png')
-player_cursor = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_racket.png').convert_alpha()
+player_cursor = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_racket.png')
 ordi_cursor = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_racket2.png')
 ball = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_ball.png')
 pygame.display.set_icon(icon)
 background_color = (0, 0, 0)
 white = (255, 255, 255)
 
-# player_cursor_position=player_cursor.get_rect()
 rect_player_cursor=player_cursor.get_rect()
 player_cursorX = int(window_width / 2) - 30
 player_cursorY = int(window_height / 4 * 3)
@@ -47,7 +46,8 @@ ballX_start = int(window_width / 2) - 15
 ballY_start = int(window_height / 2) - 15
 ballX = ballX_start
 ballY = ballY_start
-# ball_position = ball.get_rect()
+
+rect_ball = ball.get_rect()
 # ball_position.x = ballX_start
 # ball_position.y = ballY_start
 start_speedX = 4 * random_direction
