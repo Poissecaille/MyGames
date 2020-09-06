@@ -29,6 +29,7 @@ score_ordiY = window_height / 4
 
 music_game = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/ace_combat.wav")
 racket_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_racket_noise.wav")
+racket_noise2 = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_racket_noise_ordi.wav")
 obstacle_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_obstacle_noise.wav")
 goal = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_puck_goal.wav")
 # music_game.play(-1)
@@ -46,7 +47,7 @@ player_cursorX = int(window_width / 2) - 30
 player_cursorY = int(window_height / 4 * 3)
 ordi_cursorX = int(window_width / 2) - 30
 ordi_cursorY = 25
-ordi_cursor_speed = 10
+ordi_cursor_speed = 5
 rect_player = pygame.draw.rect(window, WHITE, (55, 55, 55, 55), 1)
 rect_ordi = pygame.draw.rect(window, WHITE, (55, 55, 55, 55), 1)
 ballX_start = int(window_width / 2) - 15
@@ -56,10 +57,10 @@ ballY = ballY_start
 rect_ball = pygame.draw.rect(window, WHITE, (50, 50, 50, 50), 1)
 
 random_direction = random.choice([-1, 1])
-start_speedX = 3*random_direction
-start_speedY = 3*random_direction
-ballX_speed = 8
-ballY_speed = 8
+start_speedX = 3 * random_direction
+start_speedY = 3 * random_direction
+ballX_speed = 10
+ballY_speed = 10
 
 goalXlow = 353
 goalXhigh = 652
@@ -67,31 +68,29 @@ goalYordi = 60
 goalYplayer = window_height - 60
 
 ################ SETTINGS ####################
-# collision_upgrade = 15
-# push_upgrade = 60
-# impact_distance = 40
-################ SETTINGS ####################
+
 # mouse blocking
 pygame.mouse.set_visible(True)
+collision_correction_for_straight_mov = 16
+pygame.mouse.set_pos([int(window_width / 2), int(window_height / 4 * 3)])
+push_fix_ordi = 20
 
 
 # maskPlayer = pygame.mask.from_surface(player_cursor)
 # maskBall = pygame.mask.from_surface(ball)
 
-def collision(rect_player, rect_ball):
-    if rect_ball.right < rect_player.left:
+def collision(rect_, rect_ball):
+    if rect_ball.right < rect_.left:
         return False
-    if rect_ball.bottom < rect_player.top:
+    if rect_ball.bottom < rect_.top:
         return False
-    if rect_ball.left > rect_player.right:
+    if rect_ball.left > rect_.right:
         return False
-    if rect_ball.top > rect_player.bottom:
+    if rect_ball.top > rect_.bottom:
         return False
     return True
 
 
-collision_correction_for_straight_mov = 20
-pygame.mouse.set_pos([int(window_width / 2), int(window_height / 4 * 3)])
 while True:
     random_direction = random.choice([-1, 1])
     # ball movements
@@ -118,7 +117,6 @@ while True:
                 pygame.quit()
                 sys.exit()
 
-
     # print(ballX)
     # print(ballY)
     if ballX > goalXlow and ballX < goalXhigh:
@@ -143,10 +141,10 @@ while True:
         ballY = window_height
         start_speedY *= -1
         obstacle_noise.play()
+
     if collision(rect_player, rect_ball) == True:
         start_speedX = ballX_speed
         start_speedY = ballY_speed
-
         if rect_ball.x < rect_player.x - collision_correction_for_straight_mov and rect_ball.y < rect_player.y:
             racket_noise.play()
             start_speedY *= -1
@@ -187,6 +185,62 @@ while True:
             start_speedY *= 1
             start_speedX *= 0
             racket_noise.play()
+
+    if collision(rect_ordi, rect_ball):
+        start_speedX = ballX_speed
+        start_speedY = ballY_speed
+        if rect_ball.x < rect_ordi.x - collision_correction_for_straight_mov and rect_ball.y > rect_ordi.y:
+            racket_noise2.play()
+            start_speedY *= 1
+            start_speedX *= -1
+            rect_ball.x -= push_fix_ordi
+            rect_ball.y += push_fix_ordi
+        if rect_ball.x > rect_ordi.x - collision_correction_for_straight_mov and rect_ball.x < rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y > rect_player.y:
+            racket_noise2.play()
+            start_speedX *= 0
+            start_speedY *= 1
+            rect_ball.y += push_fix_ordi
+        if rect_ball.x > rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y > rect_ordi.y:
+            racket_noise2.play()
+            start_speedX *= 1
+            start_speedY *= 1
+            rect_ball.x += push_fix_ordi
+            rect_ball.y += push_fix_ordi
+
+        if rect_ball.x < rect_ordi.x - collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y:
+            racket_noise2.play()
+            start_speedY *= -1
+            start_speedX *= -1
+            rect_ball.x -= push_fix_ordi
+            rect_ball.y -= push_fix_ordi
+        if rect_ball.x > rect_ordi.x + collision_correction_for_straight_mov and rect_ball.x < rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y:
+            racket_noise2.play()
+            start_speedX *= 0
+            start_speedY *= -1
+            rect_ball.y -= push_fix_ordi
+
+        if rect_ball.x > rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y:
+            racket_noise2.play()
+            start_speedX *= -1
+            start_speedY *= -1
+            rect_ball.x -= push_fix_ordi
+            rect_ball.y -= push_fix_ordi
+
+        #############################################################################
+        # if rect_ball.x > rect_ordi.x and rect_ball.y > rect_ordi.y - collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y + collision_correction_for_straight_mov:
+        #     start_speedY *= 0
+        #     start_speedX *= 1
+        #     racket_noise2.play()
+        # if rect_ball.x < rect_ordi.x and rect_ball.y > rect_ordi.y - collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y + collision_correction_for_straight_mov:
+        #     start_speedY *= 0
+        #     start_speedX *= 1
+        #     racket_noise2.play()
+        # if rect_ball.y > rect_ordi.y and rect_ball.x > rect_ordi.x - collision_correction_for_straight_mov and rect_ball.x < rect_ordi.x + collision_correction_for_straight_mov:
+        #     start_speedY *= 1
+        #     start_speedX *= 0
+        #     racket_noise2.play()
+        #############################################################################
+
         # if rect_ball.x < rect_player.x and rect_ball.y < rect_player.y - 30:
         #     racket_noise.play()
         #     start_speedX *= -1
@@ -233,8 +287,8 @@ while True:
         ordi_cursorY += ordi_cursor_speed
     if ordi_cursorX < goalXlow:
         ordi_cursorX = goalXlow
-    if ordi_cursorX > goalXhigh:
-        ordi_cursorX = goalXhigh
+    if ordi_cursorX > goalXhigh - 40:
+        ordi_cursorX = goalXhigh - 40
     if ordi_cursorY > goalYordi:
         ordi_cursorY = goalYordi
 
@@ -246,7 +300,6 @@ while True:
         player_cursorX = 0
     if player_cursorX >= window_width - 65:
         player_cursorX = window_width - 65
-
 
     # if player_distance_from_ball < 40:
     #     # ball_acceleration
@@ -303,9 +356,9 @@ while True:
     window.blit(player_cursor, (player_cursorX - 35, player_cursorY - 30))
     rect_ball.center = (ballX + 15, ballY + 15)
     rect_ordi.center = (ordi_cursorX + 35, ordi_cursorY + 30)
-    pygame.draw.rect(window, RED, rect_player, 1)
-    pygame.draw.rect(window, RED, rect_ball, 1)
-    pygame.draw.rect(window, RED, rect_ordi, 1)
+    pygame.draw.rect(window, RED, rect_player, 5)
+    pygame.draw.rect(window, RED, rect_ball, 5)
+    pygame.draw.rect(window, RED, rect_ordi, 5)
     window.blit(ordi_cursor, (ordi_cursorX, ordi_cursorY))
     clock.tick(60)
     pygame.display.update()
