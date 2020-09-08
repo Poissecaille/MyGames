@@ -181,7 +181,6 @@ while True:
     pygame.draw.aaline(window, white, (window_width / 2, window_height), (window_width / 2, 0))
     window.blit(display_score_player1, (int(score_player1X), int(score_player1Y)))
     window.blit(display_score_player2, (int(score_player2X), int(score_player2Y)))
-
     # update
     clock.tick(60)
     pygame.display.update()
