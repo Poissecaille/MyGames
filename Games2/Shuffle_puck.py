@@ -21,13 +21,19 @@ pygame.mixer.init()
 
 # score and texts
 player1_name = 'Alex'
+ORDI_name = 'ORDI'
 score_player1 = 0
 score_ordi = 0
 police = pygame.font.Font("D:/DEVOP/MyGames/Games2/polices/Sketch3D.otf", 25)
+policeEND = pygame.font.Font("D:/DEVOP/MyGames/Games2/polices/Sketch3D.otf", 50)
 score_player1X = window_width * 3 / 4
 score_ordiX = window_width / 4
 score_player1Y = window_height / 4
 score_ordiY = window_height / 4
+round_wonJ1 = 0
+round_wonORDI = 0
+victoryJ1 = 0
+victoryORDI = 0
 
 music_game = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/ace_combat.wav")
 racket_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_racket_noise.wav")
@@ -78,10 +84,6 @@ collision_correction_for_straight_mov = 16
 pygame.mouse.set_pos([int(window_width / 2), int(window_height / 4 * 3)])
 
 
-# push_fix_ordi = 20
-# maskPlayer = pygame.mask.from_surface(player_cursor)
-# maskBall = pygame.mask.from_surface(ball)
-
 def collision(rect_, rect_ball):
     if rect_ball.right < rect_.left:
         return False
@@ -109,20 +111,20 @@ while True:
                                           pygame.Color(255, 255, 255))
     display_score_ordi = police.render('ordi:' + str(score_ordi), True,
                                        pygame.Color(255, 255, 255))
+    display_J1_victory = policeEND.render(
+        '{} has won with {} rounds ahead'.format(player1_name, round_wonJ1 - round_wonORDI), True,
+        pygame.Color(255, 255, 255))
+    display_ORDI_victory = policeEND.render(
+        '{} has won with {} rounds ahead'.format(ORDI_name, round_wonORDI - round_wonJ1), True,
+        pygame.Color(255, 255, 255))
     if countdown >= 0:
         start_speedX = 0
         start_speedY = 0
         if countdown <= 3:
             window.blit(display_countdown, (int(window_width / 2 - 60), int(window_height / 3)))
-    print(countdown)
     # ball movements
     ballX += start_speedX
     ballY += start_speedY
-    # physics
-    # player_distance_from_ball = math.sqrt(
-    #     math.pow(player_cursorX - ballX, 2) + (math.pow(player_cursorY - ballY, 2)))
-    # ordi_distance_from_ball = math.sqrt(
-    #     math.pow(ordi_cursorX - ballX, 2) + (math.pow(ordi_cursorY - ballY, 2)))
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -148,6 +150,7 @@ while True:
             ballX = ballX_start
             ballY = ballY_start
             goal_status = "goal"
+            round_wonJ1 += 1
             score_time = pygame.time.get_ticks() // 1000
             start_speedX = start_speedX * random_direction
             start_speedY = start_speedY * random_direction
@@ -157,6 +160,7 @@ while True:
             ballX = ballX_start
             ballY = ballY_start
             goal_status = "goal"
+            round_wonORDI += 1
             score_time = pygame.time.get_ticks() // 1000
             start_speedX = start_speedX * random_direction
             start_speedY = start_speedY * random_direction
@@ -220,84 +224,26 @@ while True:
         if rect_ball.x < rect_ordi.x - collision_correction_for_straight_mov and rect_ball.y > rect_ordi.y:
             start_speedY *= 1
             start_speedX *= -1
-            # rect_ball.x -= push_fix_ordi
-            # rect_ball.y += push_fix_ordi
+
         if rect_ball.x > rect_ordi.x - collision_correction_for_straight_mov and rect_ball.x < rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y > rect_player.y:
             start_speedX *= 0
             start_speedY *= 1
-            # rect_ball.y += push_fix_ordi
+
         if rect_ball.x > rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y > rect_ordi.y:
             start_speedX *= 1
             start_speedY *= 1
-            # rect_ball.x += push_fix_ordi
-            # rect_ball.y += push_fix_ordi
 
         if rect_ball.x < rect_ordi.x - collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y:
             start_speedY *= -1
             start_speedX *= -1
-            # rect_ball.x -= push_fix_ordi
-            # rect_ball.y -= push_fix_ordi
+
         if rect_ball.x > rect_ordi.x + collision_correction_for_straight_mov and rect_ball.x < rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y:
             start_speedX *= 0
             start_speedY *= -1
-            # rect_ball.y -= push_fix_ordi
 
         if rect_ball.x > rect_ordi.x + collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y:
             start_speedX *= -1
             start_speedY *= -1
-            # rect_ball.x -= push_fix_ordi
-            # rect_ball.y -= push_fix_ordi
-
-        #############################################################################
-        # if rect_ball.x > rect_ordi.x and rect_ball.y > rect_ordi.y - collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y + collision_correction_for_straight_mov:
-        #     start_speedY *= 0
-        #     start_speedX *= 1
-        #     racket_noise2.play()
-        # if rect_ball.x < rect_ordi.x and rect_ball.y > rect_ordi.y - collision_correction_for_straight_mov and rect_ball.y < rect_ordi.y + collision_correction_for_straight_mov:
-        #     start_speedY *= 0
-        #     start_speedX *= 1
-        #     racket_noise2.play()
-        # if rect_ball.y > rect_ordi.y and rect_ball.x > rect_ordi.x - collision_correction_for_straight_mov and rect_ball.x < rect_ordi.x + collision_correction_for_straight_mov:
-        #     start_speedY *= 1
-        #     start_speedX *= 0
-        #     racket_noise2.play()
-        #############################################################################
-
-        # if rect_ball.x < rect_player.x and rect_ball.y < rect_player.y - 30:
-        #     racket_noise.play()
-        #     start_speedX *= -1
-        #     start_speedY *= -1
-        # if rect_ball.x < rect_player.x and rect_ball.y > rect_player.y - 30 and rect_ball.y < rect_player.y - 10:
-        #     racket_noise.play()
-        #     start_speedY *= 0
-        #     start_speedX *= -1
-        # if rect_ball.x < rect_player.x and rect_ball.y > rect_player.y - 10:
-        #     racket_noise.play()
-        #     start_speedY *= -1
-        #     start_speedX *= -1
-        # if rect_ball.x > rect_player.x and rect_ball.y > rect_player.y:
-        #     start_speedY *= 0
-        #     start_speedX *= 1
-
-    # masking for non-geometric forms
-    # if maskPlayer.overlap(maskBall, (rect_ball.left - rect_player.left, rect_ball.top - rect_player.top)) != None:
-    #     print("collision")
-    #     racket_noise.play()
-    #     start_speedX = ballX_speed
-    #     start_speedY = ballY_speed
-    #     start_speedY *= -1
-
-    # if ordi_distance_from_ball < impact_distance:
-    #     # bug stick ball
-    #     ballY += push_upgrade
-    #     # ball_acceleration
-    #     start_speedX = ballX_speed
-    #     start_speedY *= -1
-    #     # contact
-    #     racket_noise.play()
-    #     ballX_speed *= random_direction
-    #     random_direction = random.choice([-1, 1])
-    #     ballY_speed *= -1
 
     if ballX > ordi_cursorX:
         ordi_cursorX += ordi_cursor_speed
@@ -323,52 +269,24 @@ while True:
     if player_cursorX >= window_width - 65:
         player_cursorX = window_width - 65
 
-    # if player_distance_from_ball < 40:
-    #     # ball_acceleration
-    #
-    #     # contact
-    #
-    #     ballX_speed *= random_direction
-    #     random_direction = random.choice([-1, 1])
-    #     ballY_speed *= random_direction
-
-    # collision improvements
-    # solX = ballX - player_cursorX
-    # solY = ballY - player_cursorY
-    # if player_distance_from_ball < impact_distance:
-    #     racket_noise.play()
-    #     start_speedX = ballX_speed
-    #     start_speedY = ballY_speed
-    # if solX < -collision_upgrade and solY < 0:
-    #     ballX_speed = -5
-    #     ballY_speed = -5
-    #     ballY -= push_upgrade
-    #     ballX -= push_upgrade
-    # if solX > collision_upgrade and solY < 0:
-    #     ballX_speed = 5
-    #     ballY_speed = -5
-    #     ballY -= push_upgrade
-    #     ballX += push_upgrade
-    # if solX < -collision_upgrade and solY > 0:
-    #     ballX_speed = -5
-    #     ballY_speed = 5
-    #     ballY += push_upgrade
-    #     ballX -= push_upgrade
-    # if solX > collision_upgrade and solY > 0:
-    #     ballX_speed = 5
-    #     ballY_speed = 5
-    #     ballX += push_upgrade
-    #     ballY += push_upgrade
-    # if solX > -collision_upgrade and solX < collision_upgrade:
-    #     if solY < 0:
-    #         ballX_speed = 0
-    #         ballY_speed = 5
-    #         ballY += push_upgrade
-    #     if solY > 0:
-    #         ballX_speed = 0
-    #         ballY_speed = -5
-    #         ballY -= push_upgrade
-
+    if round_wonJ1 == 5:
+        while True:
+            window.blit(display_J1_victory, (40, int(window_height / 3)))
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    print("PRESS ESCAPE TO QUIT")
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+    if round_wonORDI == 5:
+        while True:
+            window.blit(display_ORDI_victory, window_width / 2, window_height / 2)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    print("PRESS ESCAPE TO QUIT")
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
     pygame.draw.rect(window, WHITE, (int(window_width / 3) + 20, -20, 300, 80), 1)
     pygame.draw.rect(window, WHITE, (int(window_width / 3) + 20, window_height - 60, 300, 80), 1)
     pygame.draw.aaline(window, WHITE, (0, window_height / 2), (window_width, window_height / 2))
