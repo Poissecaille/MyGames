@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 import math
 import sys
+import os
 
 # 1) Initialisation de pygame
 # 2) Appel des modules nécessaires
@@ -24,37 +25,54 @@ pygame.mixer.init()
 
 # score and texts
 score = 0
-police = pygame.font.Font("D:/DEVOP/MyGames/Games1/polices/MountainBridge.otf", 25)
+font_path = "Invader/polices"
+police = pygame.font.Font(os.path.join(font_path, "MountainBridge.otf"), 25)
 textX = 600
 textY = 20
 
 # sounds
-radio = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/the-man-who-sold-the-world-1982.wav")
-missile_explosion = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/explosion.wav")
-missile_sound = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/missile.wav")
-music_ambiance = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/metroid-prime.wav")
-flame_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games1/sounds/flame.wav")
+sounds_path = "Invader/sounds"
+radio = pygame.mixer.Sound(os.path.join(
+    sounds_path, "the-man-who-sold-the-world-1982.wav"))
+missile_explosion = pygame.mixer.Sound(
+    os.path.join(sounds_path, "explosion.wav"))
+missile_sound = pygame.mixer.Sound(os.path.join(sounds_path, "missile.wav"))
+music_ambiance = pygame.mixer.Sound(
+    os.path.join(sounds_path, "metroid-prime.wav"))
+flame_noise = pygame.mixer.Sound(os.path.join(sounds_path, "flame.wav"))
 music_ambiance.play(-1)
 
 # creation of the background
-background = pygame.image.load("D:/DEVOP/MyGames/Games1/frames/frame_0_delay-0.03s.png").convert_alpha()
-background_animated = ['frame_' + str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
+frames_path = "Invader/frames"
+background = pygame.image.load(
+    os.path.join(frames_path, "frame_0_delay-0.03s.png")).convert_alpha()
+background_animated = ['frame_' +
+                       str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
 pic_width = 800
 pic_height = 600
 animation_list = []
 for i in range(159):
-    animation_list.append(pygame.image.load("D:/DEVOP/MyGames/Games1/frames/" + str(background_animated[i])).convert_alpha())
+    animation_list.append(pygame.image.load(
+        os.path.join(frames_path, str(background_animated[i]))).convert_alpha())
 
 # legend and images
+images_path = "Invader/images"
 pygame.display.set_caption('Space Invaders')
-icon = pygame.image.load('D:/DEVOP/MyGames/Games1/images/alien.png')
+icon = pygame.image.load(os.path.join(
+    images_path, "alien.png")).convert_alpha()
 pygame.display.set_icon(icon)
-playerIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/spaceship_player.png').convert_alpha()
-enemyIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/alien_spaceship.png').convert_alpha()
-missileIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/missile-1.png').convert_alpha()
-missile_fireIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/fire-missile.png').convert_alpha()
-flameshipIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/flame-ship.png').convert_alpha()
-explosionIMG = pygame.image.load('D:/DEVOP/MyGames/Games1/images/explosion.png').convert_alpha()
+playerIMG = pygame.image.load(os.path.join(
+    images_path, "spaceship_player.png")).convert_alpha()
+enemyIMG = pygame.image.load(os.path.join(
+    images_path, "alien_spaceship.png")).convert_alpha()
+missileIMG = pygame.image.load(os.path.join(
+    images_path, "missile-1.png")).convert_alpha()
+missile_fireIMG = pygame.image.load(os.path.join(
+    images_path, "fire-missile.png")).convert_alpha()
+flameshipIMG = pygame.image.load(os.path.join(
+    images_path, "flame-ship.png")).convert_alpha()
+explosionIMG = pygame.image.load(os.path.join(
+    images_path, "explosion.png")).convert_alpha()
 
 # control of the player
 player_position = playerIMG.get_rect()
@@ -81,7 +99,8 @@ option_menu = True
 dif = ""
 while menu == True:
     window.fill((0, 0, 0))
-    text_menu = police.render("WELCOME TO MY SPACE INVADER", True, pygame.Color('#FFFFFF'))
+    text_menu = police.render(
+        "WELCOME TO MY SPACE INVADER", True, pygame.Color('#FFFFFF'))
     text_to_play = police.render("PLAY", True, pygame.Color('#FFFFFF'))
     text_to_exit = police.render("EXIT", True, pygame.Color('#FFFFFF'))
     text_to_option = police.render("OPTIONS", True, pygame.Color('#FFFFFF'))
@@ -117,14 +136,22 @@ while menu == True:
                     # print(x, y)
                     window.fill((0, 0, 0))
                     window.blit(background, (0, 0))
-                    text_menu = police.render("SPACE INVADER OPTIONS", True, pygame.Color('#FFFFFF'))
-                    difficulty0 = police.render("VERY EASY", True, pygame.Color('#FFFFFF'))
-                    difficulty1 = police.render("EASY", True, pygame.Color('#FFFFFF'))
-                    difficulty2 = police.render("MEDIUM", True, pygame.Color('#FFFFFF'))
-                    difficulty3 = police.render("HARD", True, pygame.Color('#FFFFFF'))
-                    difficulty4 = police.render("VERY HARD", True, pygame.Color('#FFFFFF'))
-                    difficulty5 = police.render("IMPOSSIBLE", True, pygame.Color('#FFFFFF'))
-                    back_choice = police.render("BACK", True, pygame.Color('#FFFFFF'))
+                    text_menu = police.render(
+                        "SPACE INVADER OPTIONS", True, pygame.Color('#FFFFFF'))
+                    difficulty0 = police.render(
+                        "VERY EASY", True, pygame.Color('#FFFFFF'))
+                    difficulty1 = police.render(
+                        "EASY", True, pygame.Color('#FFFFFF'))
+                    difficulty2 = police.render(
+                        "MEDIUM", True, pygame.Color('#FFFFFF'))
+                    difficulty3 = police.render(
+                        "HARD", True, pygame.Color('#FFFFFF'))
+                    difficulty4 = police.render(
+                        "VERY HARD", True, pygame.Color('#FFFFFF'))
+                    difficulty5 = police.render(
+                        "IMPOSSIBLE", True, pygame.Color('#FFFFFF'))
+                    back_choice = police.render(
+                        "BACK", True, pygame.Color('#FFFFFF'))
                     window.blit(background, (0, 0))
                     window.blit(text_menu, (pic_width / 3, 40))
                     window.blit(difficulty0, (pic_width / 2.1, 100))
@@ -255,8 +282,10 @@ while Continue:
         pygame.display.update()
         window.blit(animation_list[i], (0, 0, pic_width, pic_height))
         # rending score/FPS actualisation
-        score_text = police.render("Votre Score:" + str(score), True, pygame.Color('#FFFFFF'))
-        framerate = police.render("FPS:" + str(int(clock.get_fps())), True, pygame.Color('#FFFFFF'))
+        score_text = police.render(
+            "Votre Score:" + str(score), True, pygame.Color('#FFFFFF'))
+        framerate = police.render(
+            "FPS:" + str(int(clock.get_fps())), True, pygame.Color('#FFFFFF'))
         clock.tick(80)
         # keys
         for event in pygame.event.get():
@@ -280,8 +309,10 @@ while Continue:
                         fireX = player_position.x
                         missileY = player_position.y - 60
                         fireY = missileY + 66
-                        window.blit(missileIMG, (player_position.x, missileY + 40))
-                        window.blit(missile_fireIMG, (player_position.x, fireY + 20))
+                        window.blit(
+                            missileIMG, (player_position.x, missileY + 40))
+                        window.blit(missile_fireIMG,
+                                    (player_position.x, fireY + 20))
                         print("FIRE!!!!")
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
@@ -300,20 +331,26 @@ while Continue:
                     flame2X = player_position.x + 10
                     flameY = player_position.y + 30
                     flame2Y = player_position.y + 30
-                    player_position = player_position.move(0, -player_position_change)
+                    player_position = player_position.move(
+                        0, -player_position_change)
                     print("UP")
-                    window.blit(flameshipIMG, (player_position.x - 10, flameY + 30))
-                    window.blit(flameshipIMG, (player_position.x + 10, flame2Y + 30))
+                    window.blit(
+                        flameshipIMG, (player_position.x - 10, flameY + 30))
+                    window.blit(
+                        flameshipIMG, (player_position.x + 10, flame2Y + 30))
                     pygame.time.delay(2)
                 if event.key == pygame.K_DOWN:
                     print("DOWN")
-                    player_position = player_position.move(0, player_position_change)
+                    player_position = player_position.move(
+                        0, player_position_change)
                 if event.key == pygame.K_RIGHT:
                     print("RIGHT")
-                    player_position = player_position.move(player_position_change, 0)
+                    player_position = player_position.move(
+                        player_position_change, 0)
                 if event.key == pygame.K_LEFT:
                     print("LEFT")
-                    player_position = player_position.move(-player_position_change, 0)
+                    player_position = player_position.move(
+                        -player_position_change, 0)
 
         # enemy movements
         # enemy_position_x += enemy_change
@@ -353,7 +390,7 @@ while Continue:
             flame_ship = "noflame"
 
         if flame_ship == "flame":
-            flame_ship = "flame"
+            #flame_ship = "flame"
             flameY += flameYchange
             flame2Y += flameYchange
             flame_noise.play(1)
@@ -407,8 +444,10 @@ while Continue:
             # print(ManyenemyY)
             # print(ManyenemyX)
             if score >= 50:
-                victory = police.render("VICTORY", True, pygame.Color('#FFFFFF'))
-                text_rect = victory.get_rect(center=(pic_width / 2, pic_height / 2))
+                victory = police.render(
+                    "VICTORY", True, pygame.Color('#FFFFFF'))
+                text_rect = victory.get_rect(
+                    center=(pic_width / 2, pic_height / 2))
                 pygame.display.flip()
                 window.blit(victory, (text_rect))
                 while Continue_after_endgame == True:
@@ -417,10 +456,12 @@ while Continue:
                             print("PRESS ESCAPE TO QUIT")
                             if event.key == pygame.K_ESCAPE:
                                 pygame.quit()
-                    pygame.display.update()
+                   # pygame.display.update()
             if distance_enemy_from_ship < 50:
-                game_over = police.render("Aliens killed you GAME OVER", True, pygame.Color('#FFFFFF'))
-                text_rect = game_over.get_rect(center=(pic_width / 2, pic_height / 2))
+                game_over = police.render(
+                    "Aliens killed you GAME OVER", True, pygame.Color('#FFFFFF'))
+                text_rect = game_over.get_rect(
+                    center=(pic_width / 2, pic_height / 2))
                 pygame.display.flip()
                 window.blit(game_over, (text_rect))
                 while Continue_after_endgame == True:
@@ -430,7 +471,7 @@ while Continue:
                             if event.key == pygame.K_ESCAPE:
                                 pygame.quit()
                     # rafraichissement de l'écran
-                    pygame.display.update()
+                    #pygame.display.update()
 
             if state_of_target == "hit":
                 missileY = missileY - 20
@@ -450,7 +491,8 @@ while Continue:
                 pygame.display.flip()
                 pygame.time.delay(100)
                 ManyenemyX[e] = randint(x_limit_left, x_limit_right)
-                ManyenemyY[e] = randint(y_enemy_limit_high, second_y_enemy_limit_high)
+                ManyenemyY[e] = randint(
+                    y_enemy_limit_high, second_y_enemy_limit_high)
                 score += 1
             else:
                 state_of_target = "missed"

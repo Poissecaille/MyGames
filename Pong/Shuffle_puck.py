@@ -1,4 +1,4 @@
-import pygame, sys, random, math
+import pygame, sys, random, math ,os
 import time
 
 WHITE = (255, 255, 255)
@@ -24,8 +24,10 @@ player1_name = 'Alex'
 ORDI_name = 'ORDI'
 score_player1 = 0
 score_ordi = 0
-police = pygame.font.Font("D:/DEVOP/MyGames/Games2/polices/Sketch3D.otf", 25)
-policeEND = pygame.font.Font("D:/DEVOP/MyGames/Games2/polices/Sketch3D.otf", 50)
+police_path="Pong/polices"
+
+police = pygame.font.Font(os.path.join(police_path,"Sketch3D.otf"), 25)
+policeEND = pygame.font.Font(os.path.join(police_path,"Sketch3D.otf"), 50)
 score_player1X = window_width * 3 / 4
 score_ordiX = window_width / 4
 score_player1Y = window_height / 4
@@ -35,18 +37,20 @@ round_wonORDI = 0
 victoryJ1 = 0
 victoryORDI = 0
 
-music_game = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/ace_combat.wav")
-racket_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_racket_noise.wav")
-racket_noise2 = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_racket_noise_ordi.wav")
-obstacle_noise = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_obstacle_noise.wav")
-goal = pygame.mixer.Sound("D:/DEVOP/MyGames/Games2/sounds/shuffle_puck_goal.wav")
+sounds_path="Pong/sounds"
+music_game = pygame.mixer.Sound(os.path.join(sounds_path,"ace_combat.wav"))
+racket_noise = pygame.mixer.Sound(os.path.join(sounds_path,"shuffle_racket_noise.wav"))
+racket_noise2 = pygame.mixer.Sound(os.path.join(sounds_path,"shuffle_racket_noise_ordi.wav"))
+obstacle_noise = pygame.mixer.Sound(os.path.join(sounds_path,"shuffle_obstacle_noise.wav"))
+goal = pygame.mixer.Sound(os.path.join(sounds_path,"shuffle_puck_goal.wav"))
 # music_game.play(-1)
 
+images_path="Pong/images"
 pygame.display.set_caption('Shuffle Puck')
-icon = pygame.image.load('D:/DEVOP/MyGames/Games2/images/ball.png')
-player_cursor = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_racket.png').convert_alpha()
-ordi_cursor = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_racket2.png').convert_alpha()
-ball = pygame.image.load('D:/DEVOP/MyGames/Games2/images/shuffle_ball.png').convert_alpha()
+icon = pygame.image.load(os.path.join(images_path,"ball.png")).convert_alpha()
+player_cursor = pygame.image.load(os.path.join(images_path,"shuffle_racket.png")).convert_alpha()
+ordi_cursor = pygame.image.load(os.path.join(images_path,"shuffle_racket2.png")).convert_alpha()
+ball = pygame.image.load(os.path.join(images_path,"shuffle_ball.png")).convert_alpha()
 pygame.display.set_icon(icon)
 background_color = (0, 0, 0)
 
