@@ -27,7 +27,7 @@ class Server:
                     break
                 connection.sendall(str.encode(response))  # security
             except socket.error:
-                sys.stderr.write("SERVER : Start thread failed")
+                print("SERVER : Start thread failed")
                 break
         self.close_connection(connection)
 
