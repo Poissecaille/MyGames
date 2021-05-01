@@ -59,41 +59,56 @@ class Computer:
                 letter = "T"
             if self.ship_list[counter] == 1:
                 letter = "S"
-            ship_row = randint(0, len(self.computer_board))
-            ship_col = randint(0, len(self.computer_board[0]))
+            ship_row = randint(0, len(self.computer_board)-1)
+            ship_col = randint(0, len(self.computer_board[0])-1)
             choice_position = choice(["width", "height"])
             while i < self.ship_list[counter]:
-                i += 1
-                if choice_position == "width":
-                    if self.computer_board[ship_row][ship_col+i]:
+                try:
+                    i += 1
+                    if choice_position == "width":
+                        #if self.computer_board[ship_row][ship_col+i]:#######
                         if self.computer_board[ship_row][ship_col] in letter_list:
                             i -= 1
                             continue
                         self.computer_board[ship_row][ship_col] == letter
-                        if self.computer_board[ship_row][ship_col] in letter_list:
+                        if self.computer_board[ship_row][ship_col] == letter:
                             y += 1
                             self.computer_board[ship_row][ship_col-y] = letter
 
                         self.computer_board[ship_row][ship_col+i] = letter
                         self.display_computer_board()
-                    else:
+                    if not self.computer_board[ship_row][ship_col+i]:
                         y += 1
                         self.computer_board[ship_row][ship_col-y]
-                if choice_position == "height":
-                    if self.computer_board[ship_row+i][ship_col]:
+                    if choice_position == "height":
+                        #if self.computer_board[ship_row+i][ship_col]:#######
                         if self.computer_board[ship_row][ship_col] in letter_list:
                             i -= 1
                             continue
                         self.computer_board[ship_row][ship_col] == letter
-                        if self.computer_board[ship_row][ship_col] in letter_list:
+                        if self.computer_board[ship_row][ship_col] == letter:
                             y += 1
                             self.computer_board[ship_row-y][ship_col] = letter
 
                         self.computer_board[ship_row+i][ship_col] = letter
                         self.display_computer_board()
-                    else:
+                    if not self.computer_board[ship_row+i][ship_col]:
                         y += 1
                         self.computer_board[ship_row-y][ship_col]
+                except IndexError:
+                    for nested_list in self.computer_board:
+                        for index, e in enumerate(nested_list):
+                            if nested_list[index] == letter:
+                                nested_list[index] = "O"
+                    i = 0
+                    y = 0
+                    ship_row = randint(0, len(self.computer_board)-1)
+                    ship_col = randint(0, len(self.computer_board[0])-1)
+                    print("---------------- ERROR ----------------")
+                    self.display_computer_board()
+                    print("---------------- ERROR ----------------")
+                    #counter -= 1
+                    continue
 
 
 #g = Game(10)
