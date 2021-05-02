@@ -1,6 +1,4 @@
 from random import choice, randint
-from game import Game
-
 
 class Computer:
     def __init__(self, board_size):
@@ -9,10 +7,11 @@ class Computer:
         self.ship_list = [5, 4, 3, 3, 2, 1]
         self.aircraft_carrier = 5
         self.cruiser = 4
-        self.destroyer = 3  # *2
+        self.destroyer = 3
+        self.frigate = 3
         self.torpedo_boat = 2
         self.submarine = 1
-
+        self.letter_list = ["A", "C", "D","F", "T", "S"]
     def terminal_board_creation(self):
         # while True:
         for x in range(self.board_size):
@@ -43,58 +42,63 @@ class Computer:
 
     def choose_random_ships_positions(self):
         counter = -1
-        letter_list = ["A", "C", "D", "T", "S"]
+        
         # while list of ships is not over
         while counter < len(self.ship_list)-1:
             i = 0
             y = 0
             counter += 1
-            if self.ship_list[counter] == 5:
-                letter = "A"
-            if self.ship_list[counter] == 4:
-                letter = "C"
-            if self.ship_list[counter] == 3:
-                letter = "D"
-            if self.ship_list[counter] == 2:
-                letter = "T"
-            if self.ship_list[counter] == 1:
-                letter = "S"
+            letter=self.letter_list[counter]
             ship_row = randint(0, len(self.computer_board)-1)
             ship_col = randint(0, len(self.computer_board[0])-1)
             choice_position = choice(["width", "height"])
+            #choice_position="width"
             while i < self.ship_list[counter]:
+                #CHECK INDEXERROR AND CLEAN UP THE SHIP
                 try:
                     i += 1
                     if choice_position == "width":
-                        #if self.computer_board[ship_row][ship_col+i]:#######
-                        if self.computer_board[ship_row][ship_col] in letter_list:
-                            i -= 1
-                            continue
-                        self.computer_board[ship_row][ship_col] == letter
-                        if self.computer_board[ship_row][ship_col] == letter:
-                            y += 1
-                            self.computer_board[ship_row][ship_col-y] = letter
-
-                        self.computer_board[ship_row][ship_col+i] = letter
+                        #CHECK IF LOCATION IS TAKEN BY ANOTHER SHIP
+                        if self.computer_board[ship_row][ship_col]!="O":
+                            #CHECK IF LOCATION IS ALREADY TAKEN BY THE SHIP
+                            if self.computer_board[ship_row][ship_col]==letter:
+                                #IF TAKEN BY THE SHIP SEEK WHERE TO EXTEND IT
+                                if self.computer_board[ship_row][ship_col+y]=="O":
+                                    self.computer_board[ship_row][ship_col+y]=letter 
+                                    self.display_computer_board()
+                                    y+=1
+                                    continue
+                                if self.computer_board[ship_row][ship_col-y]=="O":
+                                    self.computer_board[ship_row][ship_col-y]=letter
+                                    self.display_computer_board()
+                                    y+=1
+                                    continue
+                                raise IndexError
+                            raise IndexError
+                        self.computer_board[ship_row][ship_col]=letter
                         self.display_computer_board()
-                    if not self.computer_board[ship_row][ship_col+i]:
-                        y += 1
-                        self.computer_board[ship_row][ship_col-y]
+                        y+=1
                     if choice_position == "height":
-                        #if self.computer_board[ship_row+i][ship_col]:#######
-                        if self.computer_board[ship_row][ship_col] in letter_list:
-                            i -= 1
-                            continue
-                        self.computer_board[ship_row][ship_col] == letter
-                        if self.computer_board[ship_row][ship_col] == letter:
-                            y += 1
-                            self.computer_board[ship_row-y][ship_col] = letter
-
-                        self.computer_board[ship_row+i][ship_col] = letter
+                        #CHECK IF LOCATION IS TAKEN BY ANOTHER SHIP
+                        if self.computer_board[ship_row][ship_col]!="O":
+                            #CHECK IF LOCATION IS ALREADY TAKEN BY THE SHIP
+                            if self.computer_board[ship_row][ship_col]==letter:
+                                #IF TAKEN BY THE SHIP SEEK WHERE TO EXTEND IT
+                                if self.computer_board[ship_row+y][ship_col]=="O":
+                                    self.computer_board[ship_row+y][ship_col]=letter 
+                                    self.display_computer_board()
+                                    y+=1
+                                    continue
+                                if self.computer_board[ship_row-y][ship_col]=="O":
+                                    self.computer_board[ship_row-y][ship_col]=letter
+                                    self.display_computer_board()
+                                    y+=1
+                                    continue
+                                raise IndexError
+                            raise IndexError
+                        self.computer_board[ship_row][ship_col]=letter
                         self.display_computer_board()
-                    if not self.computer_board[ship_row+i][ship_col]:
-                        y += 1
-                        self.computer_board[ship_row-y][ship_col]
+                        y+=1
                 except IndexError:
                     for nested_list in self.computer_board:
                         for index, e in enumerate(nested_list):

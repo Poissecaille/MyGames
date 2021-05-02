@@ -10,7 +10,7 @@ class Network_connection:
         self.client_sock = socket.socket(
             socket.AF_INET, socket.SOCK_STREAM)
         #print(self.start_connection)
-
+        
     def start_connection(self):
         try:
             self.client_sock.connect((self.host, self.port))
@@ -19,7 +19,10 @@ class Network_connection:
             print(self.server_response)
             return self.server_response
         except socket.error:
-            sys.stderr.write("CLIENT: Connection failed")
+            print("CLIENT: Connection failed")
+
+    def get_boat_positions(self):
+        return self.start_connection()
 
     def send_data_to_server(self, data):
         try:

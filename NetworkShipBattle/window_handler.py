@@ -1,6 +1,5 @@
 import pygame
 
-
 class Window_manager():
     def __init__(self, width, height, window_name):
         self.width = width
