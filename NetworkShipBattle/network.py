@@ -62,9 +62,7 @@ class Network_connection:
         return result
 
 
-n = Network_connection()
-n.start_connection()
-# n.send_data_to_server_and_keep_open_connection("hello server")
-# n.receive_data_from_server_and_keep_open_connection()
-n.send_data_to_server("Hey server")
-n.display_reveived_data_from_server()
+# n = Network_connection()
+# n.start_connection()
+# n.send_data_to_server("Hey server")
+# n.display_reveived_data_from_server()

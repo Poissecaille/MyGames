@@ -15,7 +15,7 @@ class Computer:
         self.submarine = 1
         self.letter_list = ["A", "C", "D", "F", "T", "S"]
 
-    def terminal_board_creation(self):
+    def terminal_computer_board_creation(self):
         # while True:
         for x in range(self.board_size):
             self.computer_board.append(["O"]*self.board_size)
@@ -134,8 +134,6 @@ class Computer:
 
 #g = Game(10)
 # g.terminal_board_creation()
-c = Computer(10)
-c.terminal_board_creation()
+# 
 # c.computer_fire_choice()
-c.choose_random_ships_positions()
-c.display_computer_board()
+# 
