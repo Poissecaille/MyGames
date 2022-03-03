@@ -4,9 +4,11 @@ import sys
 from player import Player
 from window import GameSettings
 
+# OBJECTS INITIALIZATION
+game_settings = GameSettings('Shoot them all!', (800, 600))
+player = Player(game_settings.window_center)
 
-game_settings = GameSettings('Shoot them all!')
-player_ship = Player((game_settings.window_width, game_settings.window_height))
+# MAIN LOOP
 while True:
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -16,12 +18,36 @@ while True:
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-    for i in range(len(game_settings.animated_background)):
-        game_settings.window.blit(game_settings.animated_background[i], (0, 0))
-        game_settings.window.blit(player_ship.player_img,
-                                (player_ship.x, player_ship.y))
+            elif event.key == pygame.K_SPACE:
+                player.shoot_missile()
 
-        # if i % 10 == 0:
-        pygame.display.update()
-        game_settings.clock.tick(60)
-   
+    if player.player_rect.right >= game_settings.width:
+        player.player_rect.right = game_settings.width
+    if player.player_rect.left <= 0:
+        player.player_rect.left = 0
+    if player.player_rect.top <= 0:
+        player.player_rect.top = 0
+    if player.player_rect.bottom >= game_settings.height:
+        player.player_rect.bottom = game_settings.height
+    player.handle_keys()
+
+    # ANIMATION
+    # for i in range(len(game_settings.animated_background)):
+    #     game_settings.clock.tick(100)
+    #     game_settings.window.blit(game_settings.animated_background[i], (0, 0))
+
+    game_settings.window.blit(game_settings.animated_background[0], (0, 0))
+    game_settings.window.blit(player.player_img, player.player_rect)
+    
+    try:
+        game_settings.window.blit(
+            player.missile.missile_img, player.missile.missile_rect)
+        # pygame.draw.rect(game_settings.window, (255, 0, 0),
+        #                  player.missile.missile_rect, 1)
+        player.missile.missile_rect.move_ip(0, -player.missile.missile_speed)
+    except AttributeError:
+        pass
+
+    pygame.draw.rect(game_settings.window, (255, 0, 0),
+                     player.player_rect, 1)
+    pygame.display.update()
