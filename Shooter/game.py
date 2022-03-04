@@ -1,3 +1,4 @@
+from re import I
 import pygame
 from pygame.locals import *
 import sys
@@ -10,6 +11,9 @@ player = Player(game_settings.window_center)
 
 # MAIN LOOP
 while True:
+    print(game_settings.clock.get_time())
+    if game_settings.clock.get_time() >500:
+        player.missile.missile_rect=None
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -20,6 +24,7 @@ while True:
                 sys.exit()
             elif event.key == pygame.K_SPACE:
                 player.shoot_missile()
+                game_settings.clock.tick()
 
     if player.player_rect.right >= game_settings.width:
         player.player_rect.right = game_settings.width
@@ -42,6 +47,9 @@ while True:
     try:
         game_settings.window.blit(
             player.missile.missile_img, player.missile.missile_rect)
+        game_settings.window.blit(
+            player.missile.fire_img, player.missile.fire_rect
+         )
         # pygame.draw.rect(game_settings.window, (255, 0, 0),
         #                  player.missile.missile_rect, 1)
         player.missile.missile_rect.move_ip(0, -player.missile.missile_speed)

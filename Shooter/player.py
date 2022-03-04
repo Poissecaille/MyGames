@@ -25,3 +25,4 @@ class Player:
 
     def shoot_missile(self):
         self.missile = Missile(self.player_rect.center)
+        

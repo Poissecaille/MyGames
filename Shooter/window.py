@@ -15,6 +15,7 @@ class GameSettings:
         pygame.font.init()
         pygame.mixer.init()
         pygame.display.set_caption(title)
+        self.clock = pygame.time.Clock()
         self.icon = pygame.image.load(os.path.join(
             os.getcwd(), "images/alien.png")).convert_alpha()
         self.police = pygame.font.Font(os.path.join(
