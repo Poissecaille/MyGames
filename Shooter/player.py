@@ -1,7 +1,7 @@
 import pygame
 import os
 
-from missile import Missile
+from system import System
 
 
 class Player:
@@ -12,7 +12,7 @@ class Player:
         self.player_rect.center = start_position
         self.speed = 1
 
-    def handle_keys(self):
+    def handle_keys(self) -> None:
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
             self.player_rect.move_ip(-self.speed, 0)
@@ -23,6 +23,12 @@ class Player:
         if key[pygame.K_DOWN]:
             self.player_rect.move_ip(0, self.speed)
 
-    def shoot_missile(self):
-        self.missile = Missile(self.player_rect.center)
-        
+    def handle_borders(self, system: System) -> None:
+        if self.player_rect.right >= system.width:
+            self.player_rect.right = system.width
+        if self.player_rect.left <= 0:
+            self.player_rect.left = 0
+        if self.player_rect.top <= 0:
+            self.player_rect.top = 0
+        if self.player_rect.bottom >= system.height:
+            self.player_rect.bottom = system.height
