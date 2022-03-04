@@ -7,7 +7,7 @@ from missile import Missile
 class Player:
     def __init__(self, start_position: tuple) -> None:
         self.player_img = pygame.image.load(os.path.join(
-            "Shooter/images/", "spaceship_player.png")).convert_alpha()
+            os.getcwd(), "images/spaceship_player.png")).convert_alpha()
         self.player_rect = self.player_img.get_rect()
         self.player_rect.center = start_position
         self.speed = 1
