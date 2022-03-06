@@ -1,6 +1,9 @@
 import string
 import pygame
 import os
+from enemy import Enemy
+from player import Player
+from missile import Missile
 
 class System:
     def __init__(self, title: string, window_size: tuple) -> None:
@@ -25,7 +28,23 @@ class System:
                                         str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
         self.animated_background = [pygame.image.load(
             frame).convert_alpha() for frame in self.background_images_paths]
-        self.missile_shot = False
+        
 
-    def shoot_event(self):
-        self.missile_shot = not self.missile_shot
+    def display( self , objects :dict ) -> None:
+        print (objects)
+        self.window.blit(self.animated_background[0], (0, 0))
+        
+        for key in objects:
+            if key == "player":
+                self.window.blit(objects[key].img, objects[key].rect)
+
+            if key == "missile" and objects["missile"]:
+                self.window.blit(objects[key].img, objects[key].rect)
+                if pygame.time.get_ticks()-objects[key].flame_countdown_start < Missile.FLAME_DURATION:
+                    self.window.blit(objects[key].fire_img, objects[key].fire_rect)
+
+            if key =="enemies" and objects["enemies"] :
+                for enemy in objects[key]:
+                    self.window.blit(enemy.img, enemy.rect)
+        
+            
