@@ -1,19 +1,11 @@
 import pygame
 from pygame.locals import *
 import sys
-from collision import Collision
 from missile import Missile
 from player import Player
 from enemy import Enemy
 from system import System
 import random
-
-
-def collide(rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
-    if pygame.Rect.colliderect(rect1, rect2):
-        return True
-    else:
-        return False
 
 
 TIMER_SPAWN_ENEMY = 3000
@@ -23,10 +15,10 @@ game_system = System('Shoot them all!', (600, 1000))
 player = Player(game_system.window_center)
 objects = {}
 objects["player"] = player
-# objects["missile"] = None
 objects["missiles"] = []
 objects["enemies"] = []
 objects["projectiles"] = []
+objects["effects"] = []
 
 enemy = Enemy((random.randint(0, game_system.width), 0))
 objects["enemies"].append(enemy)
@@ -67,23 +59,9 @@ while True:
     # for i in range(len(game_system.animated_background)):
     #     game_system.clock.tick(100)
     #     game_system.window.blit(game_system.animated_background[i], (0, 0))
-
-    if objects["missiles"]:
-        for missile in objects["missiles"]:
-            missile.move()
-            if missile.handle_range(game_system.height):
-                del missile
-
-            if objects["missiles"]:
-                for enemy in objects["enemies"]:
-                    if collide(missile.rect, enemy.rect):
-                        del objects["enemies"]
-                        Collision(enemy.rect.center)
-
-    if objects["enemies"]:
-        for enemy in objects["enemies"]:
-            enemy.move()
-    [enemy.move() for enemy in objects["enemies"] if objects["enemies"]]
+    game_system.handle_collisions(objects)       
+    game_system.clear_objects(objects)
+    game_system.move_objects(objects)
     game_system.display(objects)
-
+    #print(objects["effects"])
     pygame.display.update()

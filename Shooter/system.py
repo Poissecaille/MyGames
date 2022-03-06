@@ -4,6 +4,7 @@ import os
 from enemy import Enemy
 from player import Player
 from missile import Missile
+from effect import Effect
 
 
 class System:
@@ -48,3 +49,58 @@ class System:
             if key == "enemies" and objects["enemies"]:
                 for enemy in objects[key]:
                     self.window.blit(enemy.img, enemy.rect)
+
+            if key == "effects":
+                for effect in objects[key]:
+                    self.window.blit(effect.img, effect.rect)
+
+
+    def clear_objects(self, objects : dict) -> None:
+        for i,missile in enumerate(objects["missiles"]):
+            if missile.handle_range(self.height):
+                del objects["missiles"][i]
+  
+        for i,enemy  in enumerate(objects["enemies"]):
+            if enemy.handle_borders(self.height):
+                del objects["enemies"][i]
+        
+        for i,effect in enumerate(objects["effects"]):
+            if pygame.time.get_ticks()-effect.countdown_start > effect.display_time:
+                del objects["effects"][i]
+
+    def move_objects(self, objects : dict) -> None:
+        for i,missile in enumerate(objects["missiles"]):
+            missile.move()
+  
+        for i,enemy  in enumerate(objects["enemies"]):
+            enemy.move()
+
+    def collide(self,rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
+        if pygame.Rect.colliderect(rect1, rect2):
+            return True
+        else:
+            return False
+
+    def handle_collisions(self, objects: dict) -> None:
+
+        for i,missile in enumerate(objects["missiles"]):
+            for j,enemy in enumerate(objects["enemies"]):
+                if self.collide(missile.rect, enemy.rect):
+                    objects["effects"].append(Effect(enemy.rect.center,"images/explosion.png","sounds/explosion.wav"))
+                    del objects["missiles"][i]
+                    del objects["enemies"][j]
+
+        for i,effect in enumerate(objects["effects"]):
+            if self.collide(effect.rect, objects["player"]):
+                del objects["effects"][i]
+                objects["player"].life -=1
+                if objects["player"].life <=0:
+                    objects["effects"].append(Effect(objects["player"].rect.center,"images/explosion.png","sounds/explosion.wav"))
+                    
+
+
+                
+
+
+                    
+

@@ -9,7 +9,7 @@ class Enemy:
             os.getcwd(), "images/alien_spaceship.png")).convert_alpha()
         self.rect = self.img.get_rect()
         self.rect.center = start_position
-        self.speed = 1
+        self.speed = 4
         self.spawn_time = pygame.time.get_ticks()
 
     def move(self) -> None:
