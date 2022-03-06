@@ -22,7 +22,7 @@ while True:
             elif event.key == pygame.K_SPACE and not game_system.missile_shot:
                 missile = Missile(player.player_rect.center)
                 game_system.shoot_event()
-                start_ticks = pygame.time.get_ticks()
+                missile_flame_countdown_start = pygame.time.get_ticks()
 
     player.handle_keys()
     player.handle_borders(game_system)
@@ -44,7 +44,7 @@ while True:
         pygame.draw.rect(game_system.window, (255, 0, 0),
                          missile.missile_rect, 1)
 
-        if pygame.time.get_ticks()-start_ticks < Missile.FLAME_DURATION:
+        if pygame.time.get_ticks()-missile_flame_countdown_start < Missile.FLAME_DURATION:
             game_system.window.blit(
                 missile.fire_img, missile.fire_rect
             )
