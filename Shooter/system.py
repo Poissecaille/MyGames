@@ -5,6 +5,7 @@ from enemy import Enemy
 from player import Player
 from missile import Missile
 
+
 class System:
     def __init__(self, title: string, window_size: tuple) -> None:
         self.width = window_size[0]
@@ -26,25 +27,24 @@ class System:
             os.getcwd(), "sounds/the-man-who-sold-the-world-1982.wav"))
         self.background_images_paths = ['frames/frame_' +
                                         str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]
-        self.animated_background = [pygame.image.load(
-            frame).convert_alpha() for frame in self.background_images_paths]
-        
+        self.animated_background = [pygame.transform.scale(pygame.image.load(
+            frame).convert_alpha(), (self.width, self.height)) for frame in self.background_images_paths]
 
-    def display( self , objects :dict ) -> None:
-        print (objects)
+    def display(self, objects: dict) -> None:
+       # print(objects)
         self.window.blit(self.animated_background[0], (0, 0))
-        
+
         for key in objects:
             if key == "player":
                 self.window.blit(objects[key].img, objects[key].rect)
 
-            if key == "missile" and objects["missile"]:
-                self.window.blit(objects[key].img, objects[key].rect)
-                if pygame.time.get_ticks()-objects[key].flame_countdown_start < Missile.FLAME_DURATION:
-                    self.window.blit(objects[key].fire_img, objects[key].fire_rect)
+            if key == "missiles" and objects["missiles"]:
+                for missile in objects[key]:
+                    self.window.blit(missile.img, missile.rect)
+                    if pygame.time.get_ticks()-missile.flame_countdown_start < Missile.FLAME_DURATION:
+                        self.window.blit(
+                            missile.fire_img, missile.fire_rect)
 
-            if key =="enemies" and objects["enemies"] :
+            if key == "enemies" and objects["enemies"]:
                 for enemy in objects[key]:
                     self.window.blit(enemy.img, enemy.rect)
-        
-            

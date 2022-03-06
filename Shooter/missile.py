@@ -7,6 +7,7 @@ class Missile:
     DISTANCE_FROM_SHIP = 75
     DISTANCE_FROM_MISSILE = 50
     FLAME_DURATION = 100 # millisecs
+    SPAWN_TIMER = 1000
     def __init__(self, start_position: tuple) -> None:
         self.img = pygame.image.load(os.path.join(
             os.getcwd(), "images/missile-1.png")).convert_alpha()
@@ -22,7 +23,6 @@ class Missile:
             os.path.join(os.getcwd(), "sounds/missile.wav"))
         self.noise.play()
         self.speed = 1
-
         self.flame_countdown_start = pygame.time.get_ticks()
 
     def move(self) -> None:
