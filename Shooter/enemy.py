@@ -22,6 +22,4 @@ class Enemy:
             return True
         else:
             return False
-
-    # def shoot(self):
         

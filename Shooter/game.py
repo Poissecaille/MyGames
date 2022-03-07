@@ -10,6 +10,7 @@ import random
 
 
 TIMER_SPAWN_ENEMY = 3000
+X_MARGIN_ENEMY_SPAWN = 50
 
 # OBJECTS INITIALIZATION
 game_system = System('Shoot them all!', (600, 1000))
@@ -19,13 +20,12 @@ objects["player"] = player
 objects["missiles"] = []
 objects["enemies"] = []
 objects["projectiles"] = {}
-#objects["projectiles"]["timers"] = []
 objects["effects"] = []
-enemy = Enemy((random.randint(0, game_system.width), 0))
+enemy = Enemy((random.randint(0+X_MARGIN_ENEMY_SPAWN,
+                              game_system.width-X_MARGIN_ENEMY_SPAWN), 0))
 objects["enemies"].append(enemy)
 projectile = Projectile(game_system.window, enemy.rect.center)
 
-iteration = 0
 
 # MAIN LOOP
 while True:
@@ -35,7 +35,8 @@ while True:
 
     if enemy_spawn - objects["enemies"][-1].spawn_time > Enemy.SPAWN_TIMER:
         objects["enemies"].append(
-            Enemy((random.randint(0, game_system.width), 0)))
+            Enemy((random.randint(0+X_MARGIN_ENEMY_SPAWN,
+                                  game_system.width-X_MARGIN_ENEMY_SPAWN), 0)))
         enemy_spawn = pygame.time.get_ticks()
 
     for i, enemy in enumerate(objects["enemies"]):
@@ -46,10 +47,11 @@ while True:
             objects["projectiles"]["timer{}".format(
                 str(i))] = pygame.time.get_ticks()
         else:
-            if projectile_spawn - objects["projectiles"]["enemy{}".format(str(i))][-1].spawn_time > Projectile.SPAWN_TIMER:
-                objects["projectiles"]["enemy{}".format(str(i))].append(Projectile(
-                    game_system.window, enemy.rect.center))
-                projectile_spawn = pygame.time.get_ticks()
+            if objects["projectiles"]["enemy{}".format(str(i))]:
+                if projectile_spawn - objects["projectiles"]["enemy{}".format(str(i))][-1].spawn_time > Projectile.SPAWN_TIMER:
+                    objects["projectiles"]["enemy{}".format(str(i))].append(Projectile(
+                        game_system.window, enemy.rect.center))
+                    projectile_spawn = pygame.time.get_ticks()
 
     dt = game_system.clock.tick(60)
 
@@ -75,14 +77,10 @@ while True:
     # for i in range(len(game_system.animated_background)):
     #     game_system.clock.tick(100)
     #     game_system.window.blit(game_system.animated_background[i], (0, 0))
+
     game_system.handle_collisions(objects)
     game_system.clear_objects(objects)
     game_system.move_objects(objects)
-    # if iteration % 2 == 0:
     game_system.move_projectiles(objects["projectiles"], player.rect)
-        # iteration = 0
     game_system.display(objects)
-    # print(objects["effects"])
     pygame.display.update()
-    # iteration += 1
-    # print(iteration)

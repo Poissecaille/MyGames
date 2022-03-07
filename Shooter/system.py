@@ -61,7 +61,7 @@ class System:
                         for projectile in objects[key]["enemy{}".format(str(i))]:
                             projectile.color = (random.randint(
                                 0, 255), random.randint(0, 255), random.randint(0, 255))
-                            pygame.draw.circle(
+                            projectile.circle_rect = pygame.draw.circle(
                                 self.window, projectile.color, projectile.circle_rect.center, projectile.radius, width=0)
 
     def clear_objects(self, objects: dict) -> None:
@@ -76,6 +76,12 @@ class System:
         for i, effect in enumerate(objects["effects"]):
             if pygame.time.get_ticks()-effect.countdown_start > effect.display_time:
                 del objects["effects"][i]
+
+        for i, key in enumerate(objects["projectiles"]):
+            if key == "enemy{}".format(str(i)):
+                for y, projectile in enumerate(objects["projectiles"][key]):
+                    if projectile.handle_range(self.width, self.height):
+                        del objects["projectiles"][key][y]
 
     def move_objects(self, objects: dict) -> None:
         for i, missile in enumerate(objects["missiles"]):
@@ -93,8 +99,6 @@ class System:
                             projectile.circle_rect.x - player_rect.x) // 20
                         projectile.speed_y = abs(
                             projectile.circle_rect.y - player_rect.y) // 20
-                        # if projectile.speed_x <= 0:
-                        #     projectile.speed_x = 1
                         if projectile.circle_rect.x > player_rect.x:
                             projectile.speed_x = projectile.speed_x * -1
                             if projectile.circle_rect.y > player_rect.y:
@@ -141,3 +145,11 @@ class System:
                 if objects["player"].life <= 0:
                     objects["effects"].append(Effect(
                         objects["player"].rect.center, "images/explosion.png", "sounds/explosion.wav"))
+        # TODO FIX
+        # for i, key in enumerate(objects["projectiles"]):
+        #     if key == "enemy{}".format(str(i)):
+        #         for y, projectile in enumerate(objects["projectiles"][key]):
+        #             if self.collide(projectile.circle_rect, objects["player"]):
+        #                 objects["effects"].append(
+        #                     Effect(projectile.circle_rect.center, "images/explosion.png", "sounds/explosion.wav"))
+        #                 del objects["projectiles"][key][y]

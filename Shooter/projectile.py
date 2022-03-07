@@ -22,7 +22,7 @@ class Projectile:
         self.circle_rect.y += y
 
     def handle_range(self, width: int, height: int) -> None:
-        if self.circle_rect.right >= width or self.circle_rect.left <= 0 or self.circle_rect.bottom >= height:
+        if self.circle_rect.right >= width or self.circle_rect.left <= 0 or self.circle_rect.bottom >= height or self.circle_rect.bottom <= 0:
             return True
         else:
             return False
