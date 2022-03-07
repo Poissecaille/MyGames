@@ -1,6 +1,7 @@
 import pygame
 import os
 
+
 class Player:
     def __init__(self, start_position: tuple) -> None:
         self.img = pygame.image.load(os.path.join(
@@ -21,7 +22,7 @@ class Player:
         if key[pygame.K_DOWN]:
             self.rect.move_ip(0, self.speed)
 
-    def handle_borders(self, width :int , height: int) -> None:
+    def handle_borders(self, width: int, height: int) -> None:
         if self.rect.right >= width:
             self.rect.right = width
         if self.rect.left <= 0:

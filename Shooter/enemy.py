@@ -1,9 +1,11 @@
 import pygame
 import os
 
+
 class Enemy:
     SHOOT_COOLDOWN = 2000
     SPAWN_TIMER = 1000
+
     def __init__(self, start_position: tuple) -> None:
         self.img = pygame.image.load(os.path.join(
             os.getcwd(), "images/alien_spaceship.png")).convert_alpha()
@@ -18,5 +20,8 @@ class Enemy:
     def handle_borders(self, height: int) -> bool:
         if self.rect.bottom >= height:
             return True
-        else :
+        else:
             return False
+
+    # def shoot(self):
+        
