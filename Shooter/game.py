@@ -24,7 +24,7 @@ objects["effects"] = []
 enemy = Enemy((random.randint(0+X_MARGIN_ENEMY_SPAWN,
                               game_system.width-X_MARGIN_ENEMY_SPAWN), 0))
 objects["enemies"].append(enemy)
-projectile = Projectile(game_system.window, enemy.rect.center)
+projectile = Projectile(game_system.window, enemy.rect.center,game_system.aim_projectile_vector(enemy,player))
 
 
 # MAIN LOOP
@@ -43,15 +43,16 @@ while True:
         if not "enemy{}".format(str(i)) in objects["projectiles"]:
             objects["projectiles"]["enemy{}".format(str(i))] = []
             objects["projectiles"]["enemy{}".format(str(i))].append(Projectile(
-                game_system.window, enemy.rect.center))
+                game_system.window, enemy.rect.center, game_system.aim_projectile_vector(enemy,player)))
             objects["projectiles"]["timer{}".format(
                 str(i))] = pygame.time.get_ticks()
         else:
             if objects["projectiles"]["enemy{}".format(str(i))]:
                 if projectile_spawn - objects["projectiles"]["enemy{}".format(str(i))][-1].spawn_time > Projectile.SPAWN_TIMER:
                     objects["projectiles"]["enemy{}".format(str(i))].append(Projectile(
-                        game_system.window, enemy.rect.center))
+                        game_system.window, enemy.rect.center,game_system.aim_projectile_vector(enemy,player)))
                     projectile_spawn = pygame.time.get_ticks()
+
 
     dt = game_system.clock.tick(60)
 
@@ -81,6 +82,5 @@ while True:
     game_system.handle_collisions(objects)
     game_system.clear_objects(objects)
     game_system.move_objects(objects)
-    game_system.move_projectiles(objects["projectiles"], player.rect)
     game_system.display(objects)
     pygame.display.update()

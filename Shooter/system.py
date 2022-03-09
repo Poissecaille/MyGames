@@ -90,44 +90,34 @@ class System:
         for i, enemy in enumerate(objects["enemies"]):
             enemy.move()
 
-    def move_projectiles(self, projectiles: dict, player_rect) -> None:
-        for i, enemy in enumerate(projectiles):
-            if "enemy{}".format(str(i)) in projectiles:
-                for projectile in projectiles["enemy{}".format(str(i))]:
-                    if not projectile.path_updated:
-                        projectile.speed_x = abs(
-                            projectile.circle_rect.x - player_rect.x) // 20
-                        projectile.speed_y = abs(
-                            projectile.circle_rect.y - player_rect.y) // 20
-                        if projectile.circle_rect.x > player_rect.x:
-                            projectile.speed_x = projectile.speed_x * -1
-                            if projectile.circle_rect.y > player_rect.y:
-                                projectile.speed_y = projectile.speed_y * -1
-                                projectile.move(projectile.speed_x,
-                                                projectile.speed_y)
-                                projectile.path_updated = True
-                            else:
-                                projectile.move(projectile.speed_x,
-                                                projectile.speed_y)
-                                projectile.path_updated = True
-                        else:
-                            if projectile.circle_rect.y > player_rect.y:
-                                projectile.speed_y = projectile.speed_y * -1
-                                projectile.move(projectile.speed_x,
-                                                projectile.speed_y)
-                                projectile.path_updated = True
-                            else:
-                                projectile.move(projectile.speed_x,
-                                                projectile.speed_y)
-                                projectile.path_updated = True
-                    else:
-                        projectile.move(projectile.speed_x, projectile.speed_y)
+
+        for i, enemy in enumerate(objects["projectiles"]):
+            if "enemy{}".format(str(i)) in objects["projectiles"].keys():
+                for projectile in objects["projectiles"]["enemy"+str(i)]:
+                        projectile.move()
+
+
+
+
+
+    def aim_projectile_vector (self, enemy , player) :
+        speed_x = abs(enemy.rect.center[0] - player.rect.center[0]) // 20
+        speed_y = abs(enemy.rect.center[1] - player.rect.center[1]) // 20
+        if player.rect.center[1] < enemy.rect.center[1]:
+            speed_y *= -1
+
+        if player.rect.center[0] < enemy.rect.center[0]:
+            speed_x *= -1
+        return (speed_x,speed_y)
+
 
     def collide(self, rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
         if pygame.Rect.colliderect(rect1, rect2):
             return True
         else:
             return False
+
+
 
     def handle_collisions(self, objects: dict) -> None:
         for i, missile in enumerate(objects["missiles"]):
@@ -145,11 +135,12 @@ class System:
                 if objects["player"].life <= 0:
                     objects["effects"].append(Effect(
                         objects["player"].rect.center, "images/explosion.png", "sounds/explosion.wav"))
-        # TODO FIX
-        # for i, key in enumerate(objects["projectiles"]):
-        #     if key == "enemy{}".format(str(i)):
-        #         for y, projectile in enumerate(objects["projectiles"][key]):
-        #             if self.collide(projectile.circle_rect, objects["player"]):
-        #                 objects["effects"].append(
-        #                     Effect(projectile.circle_rect.center, "images/explosion.png", "sounds/explosion.wav"))
-        #                 del objects["projectiles"][key][y]
+        
+        for i, key in enumerate(objects["projectiles"]):
+            if "enemy" in key:
+                for y, projectile in enumerate(objects["projectiles"][key]):
+                    if self.collide(projectile.circle_rect, objects["player"]):
+                        objects["effects"].append(
+                            Effect(projectile.circle_rect.center, "images/explosion.png", "sounds/explosion.wav"))
+                        del objects["projectiles"][key][y]
+                        
