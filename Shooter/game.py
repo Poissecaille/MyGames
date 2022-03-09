@@ -28,10 +28,13 @@ projectile = Projectile(game_system.window, enemy.rect.center,game_system.aim_pr
 
 
 # MAIN LOOP
+background_iter = 0 
+iter = 0
 while True:
+
+    game_system.clock.tick(60)
     enemy_spawn = pygame.time.get_ticks()
     missile_spawn = pygame.time.get_ticks()
-    #projectile_spawn = pygame.time.get_ticks()
 
     if enemy_spawn - objects["enemies"][-1].spawn_time > Enemy.SPAWN_TIMER:
         objects["enemies"].append(
@@ -46,7 +49,7 @@ while True:
             objects["projectiles"].append(Projectile(game_system.window, enemy.rect.center, game_system.aim_projectile_vector(enemy,player)))
             enemy.shoot_cooldown = timer
 
-    dt = game_system.clock.tick(60)
+    
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -70,9 +73,18 @@ while True:
     # for i in range(len(game_system.animated_background)):
     #     game_system.clock.tick(100)
     #     game_system.window.blit(game_system.animated_background[i], (0, 0))
-
+    
     game_system.handle_collisions(objects)
     game_system.clear_objects(objects)
     game_system.move_objects(objects)
-    game_system.display(objects)
+    game_system.display_background(background_iter)
+    game_system.display_objects(objects)
+
+    iter += 1
+    if iter%2 ==0 :
+        background_iter +=1
+    if background_iter >= 159:
+        background_iter =0
     pygame.display.update()
+
+    

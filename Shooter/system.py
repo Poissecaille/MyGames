@@ -32,9 +32,9 @@ class System:
         self.animated_background = [pygame.transform.scale(pygame.image.load(
             frame).convert_alpha(), (self.width, self.height)) for frame in self.background_images_paths]
 
-    def display(self, objects: dict) -> None:
+    def display_objects(self, objects: dict) -> None:
        # print(objects)
-        self.window.blit(self.animated_background[0], (0, 0))
+        #self.window.blit(self.animated_background[0], (0, 0))
 
         for key in objects:
             if key == "player":
@@ -60,6 +60,10 @@ class System:
                     projectile.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
                     projectile.circle_rect = pygame.draw.circle(
                         self.window, projectile.color, projectile.circle_rect.center, projectile.radius, width=0)
+
+    def display_background(self, index) -> None:
+        self.window.blit(self.animated_background[index], (0, 0))
+
 
     def clear_objects(self, objects: dict) -> None:
         for i, missile in enumerate(objects["missiles"]):
@@ -91,10 +95,13 @@ class System:
         for i, projectile in enumerate(objects["projectiles"]):
             projectile.move()
 
-
     def aim_projectile_vector (self, enemy , player) :
         speed_x = abs(enemy.rect.center[0] - player.rect.center[0]) // 20
         speed_y = abs(enemy.rect.center[1] - player.rect.center[1]) // 20
+
+        speed_x += random.randint(1,3)
+        speed_y += random.randint(1,3)
+
         if player.rect.center[1] < enemy.rect.center[1]:
             speed_y *= -1
 
@@ -102,14 +109,11 @@ class System:
             speed_x *= -1
         return (speed_x,speed_y)
 
-
     def collide(self, rect1: pygame.Rect, rect2: pygame.Rect) -> bool:
         if pygame.Rect.colliderect(rect1, rect2):
             return True
         else:
             return False
-
-
 
     def handle_collisions(self, objects: dict) -> None:
         for i, missile in enumerate(objects["missiles"]):

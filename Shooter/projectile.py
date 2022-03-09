@@ -1,10 +1,11 @@
+from cv2 import sqrt
 import pygame
 import random
 
 
 class Projectile:
     DISTANCE_FROM_SHIP = 75
-    #SPAWN_TIMER = random.randint(1000, 4000)
+    MAX_SPEED = 2
 
     def __init__(self, surface, start_position: tuple, vector : tuple) -> None:
         self.color = (255, 0, 0)
@@ -15,6 +16,7 @@ class Projectile:
         #self.spawn_time = pygame.time.get_ticks()
         self.speed_x = vector[0]
         self.speed_y = vector[1]
+
 
     def move(self) -> None:
         self.circle_rect.x += self.speed_x

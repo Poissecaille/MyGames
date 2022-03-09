@@ -8,7 +8,7 @@ class Player:
             os.getcwd(), "images/spaceship_player.png")).convert_alpha()
         self.rect = self.img.get_rect()
         self.rect.center = start_position
-        self.speed = 4
+        self.speed = 6
         self.life = 3
 
     def handle_keys(self) -> None:
