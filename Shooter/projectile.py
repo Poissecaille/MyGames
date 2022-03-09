@@ -4,7 +4,7 @@ import random
 
 class Projectile:
     DISTANCE_FROM_SHIP = 75
-    SPAWN_TIMER = random.randint(1000, 4000)
+    #SPAWN_TIMER = random.randint(1000, 4000)
 
     def __init__(self, surface, start_position: tuple, vector : tuple) -> None:
         self.color = (255, 0, 0)
@@ -12,10 +12,9 @@ class Projectile:
         self.circle_rect = pygame.draw.circle(
             surface, (self.color), start_position, self.radius)
         self.circle_rect.center = start_position
-        self.spawn_time = pygame.time.get_ticks()
+        #self.spawn_time = pygame.time.get_ticks()
         self.speed_x = vector[0]
         self.speed_y = vector[1]
-        self.path_updated = False
 
     def move(self) -> None:
         self.circle_rect.x += self.speed_x

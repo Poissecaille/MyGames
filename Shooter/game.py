@@ -19,7 +19,7 @@ objects = {}
 objects["player"] = player
 objects["missiles"] = []
 objects["enemies"] = []
-objects["projectiles"] = {}
+objects["projectiles"] = []
 objects["effects"] = []
 enemy = Enemy((random.randint(0+X_MARGIN_ENEMY_SPAWN,
                               game_system.width-X_MARGIN_ENEMY_SPAWN), 0))
@@ -31,7 +31,7 @@ projectile = Projectile(game_system.window, enemy.rect.center,game_system.aim_pr
 while True:
     enemy_spawn = pygame.time.get_ticks()
     missile_spawn = pygame.time.get_ticks()
-    projectile_spawn = pygame.time.get_ticks()
+    #projectile_spawn = pygame.time.get_ticks()
 
     if enemy_spawn - objects["enemies"][-1].spawn_time > Enemy.SPAWN_TIMER:
         objects["enemies"].append(
@@ -39,20 +39,12 @@ while True:
                                   game_system.width-X_MARGIN_ENEMY_SPAWN), 0)))
         enemy_spawn = pygame.time.get_ticks()
 
-    for i, enemy in enumerate(objects["enemies"]):
-        if not "enemy{}".format(str(i)) in objects["projectiles"]:
-            objects["projectiles"]["enemy{}".format(str(i))] = []
-            objects["projectiles"]["enemy{}".format(str(i))].append(Projectile(
-                game_system.window, enemy.rect.center, game_system.aim_projectile_vector(enemy,player)))
-            objects["projectiles"]["timer{}".format(
-                str(i))] = pygame.time.get_ticks()
-        else:
-            if objects["projectiles"]["enemy{}".format(str(i))]:
-                if projectile_spawn - objects["projectiles"]["enemy{}".format(str(i))][-1].spawn_time > Projectile.SPAWN_TIMER:
-                    objects["projectiles"]["enemy{}".format(str(i))].append(Projectile(
-                        game_system.window, enemy.rect.center,game_system.aim_projectile_vector(enemy,player)))
-                    projectile_spawn = pygame.time.get_ticks()
 
+    for i,enemy in enumerate(objects["enemies"]):
+        timer = pygame.time.get_ticks()
+        if(timer > enemy.shoot_cooldown + Enemy.SHOOT_COOLDOWN):
+            objects["projectiles"].append(Projectile(game_system.window, enemy.rect.center, game_system.aim_projectile_vector(enemy,player)))
+            enemy.shoot_cooldown = timer
 
     dt = game_system.clock.tick(60)
 

@@ -3,7 +3,7 @@ import os
 
 
 class Enemy:
-    SHOOT_COOLDOWN = 2000
+    SHOOT_COOLDOWN = 1500
     SPAWN_TIMER = 1000
 
     def __init__(self, start_position: tuple) -> None:
@@ -12,6 +12,7 @@ class Enemy:
         self.rect = self.img.get_rect()
         self.rect.center = start_position
         self.speed = 4
+        self.shoot_cooldown = pygame.time.get_ticks()
         self.spawn_time = pygame.time.get_ticks()
 
     def move(self) -> None:
@@ -22,4 +23,6 @@ class Enemy:
             return True
         else:
             return False
+
+
         
