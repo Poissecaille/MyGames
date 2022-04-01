@@ -21,13 +21,3 @@ class Player:
             self.rect.move_ip(0, -self.speed)
         if key[pygame.K_DOWN]:
             self.rect.move_ip(0, self.speed)
-
-    def handle_borders(self, width: int, height: int) -> None:
-        if self.rect.right >= width:
-            self.rect.right = width
-        if self.rect.left <= 0:
-            self.rect.left = 0
-        if self.rect.top <= 0:
-            self.rect.top = 0
-        if self.rect.bottom >= height:
-            self.rect.bottom = height

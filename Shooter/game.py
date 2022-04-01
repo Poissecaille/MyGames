@@ -23,34 +23,17 @@ objects["projectiles"] = []
 objects["effects"] = []
 enemy = Enemy((random.randint(0+X_MARGIN_ENEMY_SPAWN,
                               game_system.width-X_MARGIN_ENEMY_SPAWN), 0))
-objects["enemies"].append(enemy)
-projectile = Projectile(game_system.window, enemy.rect.center,game_system.aim_projectile_vector(enemy,player))
+#objects["enemies"].append(enemy)
+
 
 
 # MAIN LOOP
-background_iter = 0 
-iter = 0
 while True:
 
     game_system.clock.tick(60)
-    enemy_spawn = pygame.time.get_ticks()
-    missile_spawn = pygame.time.get_ticks()
-
-    if enemy_spawn - objects["enemies"][-1].spawn_time > Enemy.SPAWN_TIMER:
-        objects["enemies"].append(
-            Enemy((random.randint(0+X_MARGIN_ENEMY_SPAWN,
-                                  game_system.width-X_MARGIN_ENEMY_SPAWN), 0)))
-        enemy_spawn = pygame.time.get_ticks()
-
-
-    for i,enemy in enumerate(objects["enemies"]):
-        timer = pygame.time.get_ticks()
-        if(timer > enemy.shoot_cooldown + Enemy.SHOOT_COOLDOWN):
-            objects["projectiles"].append(Projectile(game_system.window, enemy.rect.center, game_system.aim_projectile_vector(enemy,player)))
-            enemy.shoot_cooldown = timer
-
     
-
+    
+    missile_spawn = pygame.time.get_ticks()
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
@@ -66,20 +49,22 @@ while True:
                     objects["missiles"].append(Missile(player.rect.center))
                     missile_spawn = pygame.time.get_ticks()
     player.handle_keys()
-    player.handle_borders(game_system.width, game_system.height)
 
+    ## TODO ##
+    # 1. Gérer les bords pour le player.
+    # 2. Gérer les missiles du player
+    # 3. Mettre en mouvement les objets.
+    # 4. Nettoyage des objets
+    # 5. Gérer le spawn des ennemis.
+    # 6. Gérer la collision missile/ennemi.
+    # 7. Gérer le tir ennemi
+    # 8. Background dynamique
 
-    game_system.handle_collisions(objects)
-    game_system.clear_objects(objects)
-    game_system.move_objects(objects)
-    game_system.display_background(background_iter)
+    
+    
+    game_system.display_background(0)
     game_system.display_objects(objects)
     
-    iter += 1
-    if iter%2 ==0 :
-        background_iter +=1
-    if background_iter >= 159:
-        background_iter =0
     pygame.display.update()
 
     
