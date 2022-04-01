@@ -69,16 +69,13 @@ while True:
     player.handle_keys()
     player.handle_borders(game_system.width, game_system.height)
 
-    # TODO ANIMATION
-    # for i in range(len(game_system.animated_background)):
-    #     game_system.clock.tick(100)
-    #     game_system.window.blit(game_system.animated_background[i], (0, 0))
-    
+
     game_system.handle_collisions(objects)
     game_system.clear_objects(objects)
     game_system.move_objects(objects)
     game_system.display_background(background_iter)
     game_system.display_objects(objects)
+    
 
     iter += 1
     if iter%2 ==0 :

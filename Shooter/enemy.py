@@ -3,7 +3,7 @@ import os
 
 
 class Enemy:
-    SHOOT_COOLDOWN = 1500
+    SHOOT_COOLDOWN = 2000
     SPAWN_TIMER = 1000
 
     def __init__(self, start_position: tuple) -> None:

@@ -1,7 +1,6 @@
-from cv2 import sqrt
 import pygame
 import random
-
+from math import sqrt
 
 class Projectile:
     DISTANCE_FROM_SHIP = 75
@@ -14,8 +13,21 @@ class Projectile:
             surface, (self.color), start_position, self.radius)
         self.circle_rect.center = start_position
         #self.spawn_time = pygame.time.get_ticks()
-        self.speed_x = vector[0]
-        self.speed_y = vector[1]
+
+    
+        x = vector[0]
+        y = vector[1]
+        
+        hypothenuse = sqrt(x**2 + y**2)
+
+        x_bis = (5/hypothenuse)*x
+        y_bis = (5/hypothenuse)*y
+        self.speed_x = x_bis
+        if y_bis < 0:
+            self.speed_y = -y_bis
+        else:
+            self.speed_y = y_bis
+
 
 
     def move(self) -> None:

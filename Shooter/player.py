@@ -9,7 +9,7 @@ class Player:
         self.rect = self.img.get_rect()
         self.rect.center = start_position
         self.speed = 6
-        self.life = 3
+        self.life = 10
 
     def handle_keys(self) -> None:
         key = pygame.key.get_pressed()

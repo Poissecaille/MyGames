@@ -91,7 +91,6 @@ class System:
         for i, enemy in enumerate(objects["enemies"]):
             enemy.move()
 
-
         for i, projectile in enumerate(objects["projectiles"]):
             projectile.move()
 
@@ -99,8 +98,6 @@ class System:
         speed_x = abs(enemy.rect.center[0] - player.rect.center[0]) // 20
         speed_y = abs(enemy.rect.center[1] - player.rect.center[1]) // 20
 
-        speed_x += random.randint(1,3)
-        speed_y += random.randint(1,3)
 
         if player.rect.center[1] < enemy.rect.center[1]:
             speed_y *= -1
