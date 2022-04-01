@@ -50,6 +50,19 @@ while True:
                     missile_spawn = pygame.time.get_ticks()
     player.handle_keys()
 
+
+
+    game_system.display_background(0)
+    game_system.display_objects(objects)
+    
+    pygame.display.update()
+
+    
+
+
+
+
+    
     ## TODO ##
     # 1. Gérer les bords pour le player.
     # 2. Gérer les missiles du player
@@ -59,12 +72,3 @@ while True:
     # 6. Gérer la collision missile/ennemi.
     # 7. Gérer le tir ennemi
     # 8. Background dynamique
-
-    
-    
-    game_system.display_background(0)
-    game_system.display_objects(objects)
-    
-    pygame.display.update()
-
-    

@@ -25,8 +25,6 @@ class System:
             os.getcwd(), "images/alien.png")).convert_alpha()
         self.police = pygame.font.Font(os.path.join(
             os.getcwd(), "polices/MountainBridge.otf"), 25)
-        self.radio = pygame.mixer.Sound(os.path.join(
-            os.getcwd(), "sounds/the-man-who-sold-the-world-1982.wav"))
         
         self.background_images_paths = ['frames/frame_' +
                                         str(i + 1) + '_delay-0.03s.png' for i in range(0, 159)]

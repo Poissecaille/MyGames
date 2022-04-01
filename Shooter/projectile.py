@@ -15,15 +15,8 @@ class Projectile:
         #self.spawn_time = pygame.time.get_ticks()
 
     
-        x = vector[0]
-        y = vector[1]
-        
-        hypothenuse = sqrt(x**2 + y**2)
-
-        x_bis = (self.MAX_SPEED/hypothenuse)*x
-        y_bis = (self.MAX_SPEED/hypothenuse)*y
-        self.speed_x = x_bis
-        self.speed_y = y_bis
+        self.speed_x = vector[0]
+        self.speed_y = vector[1]
 
 
 
