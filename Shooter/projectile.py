@@ -23,10 +23,8 @@ class Projectile:
         x_bis = (self.MAX_SPEED/hypothenuse)*x
         y_bis = (self.MAX_SPEED/hypothenuse)*y
         self.speed_x = x_bis
-        if y_bis < 0:
-            self.speed_y = -y_bis
-        else:
-            self.speed_y = y_bis
+        self.speed_y = y_bis
+
 
 
 
