@@ -4,7 +4,7 @@ from math import sqrt
 
 class Projectile:
     DISTANCE_FROM_SHIP = 75
-    MAX_SPEED = 2
+    MAX_SPEED = 10
 
     def __init__(self, surface, start_position: tuple, vector : tuple) -> None:
         self.color = (255, 0, 0)
@@ -20,8 +20,8 @@ class Projectile:
         
         hypothenuse = sqrt(x**2 + y**2)
 
-        x_bis = (5/hypothenuse)*x
-        y_bis = (5/hypothenuse)*y
+        x_bis = (self.MAX_SPEED/hypothenuse)*x
+        y_bis = (self.MAX_SPEED/hypothenuse)*y
         self.speed_x = x_bis
         if y_bis < 0:
             self.speed_y = -y_bis

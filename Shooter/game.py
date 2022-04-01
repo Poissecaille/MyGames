@@ -63,7 +63,6 @@ while True:
                 if not objects["missiles"]:
                     objects["missiles"].append(Missile(player.rect.center))
                 if objects["missiles"] and missile_spawn - objects["missiles"][-1].flame_countdown_start > Missile.SPAWN_TIMER:
-                    # objects["missiles"] = Missile(player.rect.center)
                     objects["missiles"].append(Missile(player.rect.center))
                     missile_spawn = pygame.time.get_ticks()
     player.handle_keys()
