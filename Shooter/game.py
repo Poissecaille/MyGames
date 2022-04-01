@@ -75,7 +75,6 @@ while True:
     game_system.display_background(background_iter)
     game_system.display_objects(objects)
     
-
     iter += 1
     if iter%2 ==0 :
         background_iter +=1
